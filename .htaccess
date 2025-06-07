@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # First try to find the file in storage (for images/files)
+    RewriteCond %{REQUEST_URI} ^/storage [NC]
+    RewriteCond %{DOCUMENT_ROOT}/storage/app/public/$1 -f
+    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L]
+
+    # Then redirect everything else to public/
+    RewriteCond %{REQUEST_URI} !^/storage [NC]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
