@@ -21,9 +21,8 @@ use App\Mail\ProjectUpdateMail;
 class ProjectController extends Controller
 {
 
-    public function __construct(
-        private ProjectService $projectService
-    ) {
+    public function __construct()
+    {
         $this->middleware('can:Projects List')->only(['index']);
         $this->middleware('can:Create Project')->only(['create', 'store']);
         $this->middleware('can:Edit Project')->only(['edit', 'update']);
@@ -173,39 +172,83 @@ class ProjectController extends Controller
     }
 
 
-    public function __construct(private ProjectService $projectService)
-    {
-    }
-
     public function store(Request $request)
     {
         try {
-            $project = $this->projectService->create($request->all());
+            $validated = $request->validate([
+                'date' => 'required|date',
+                'item_name' => 'required|string|max:255',
+                'project_name' => 'required|string|max:255',
+                'quantity' => 'required|integer|min:1',
+                'execution_period' => 'required|integer|min:1',
+                'delivery_date' => 'required|date|after_or_equal:date',
+                'delivery_location' => 'required|string|max:255',
+                'panel_number' => 'required|string|max:255',
+                'initial_approval' => 'nullable|in:pending,approved,rejected',
+                'technical_approval' => 'required|in:pending,approved,rejected',
+                'description' => 'required|string',
+                'client_id' => 'required|exists:clients,id',
+                'initial_files.*' => 'nullable',
+                'technical_files.*' => 'nullable',
+            ]);
+        } catch (ValidationException $e) {
             
+            // Log validation error
+            Log::error('Validation Error', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            
+            // Return errors as JSON response
             if ($request->ajax()) {
                 return response()->json([
-                    'status' => 'success',
-                    'message' => 'Project created successfully',
-                    'data' => $project
-                ], 201);
-            }
-
-            return redirect()->route('projects.index')
-                ->with('success', 'Project created successfully');
-
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => $e->getMessage(),
-                    'errors' => json_decode($e->getMessage(), true)
+                    'message' => 'Validation Error',
+                    'errors' => $e->errors()
                 ], 422);
             }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors(['error' => $e->getMessage()]);
+    
+            // Re-throw the error for non-AJAX requests
+            throw $e;
         }
+
+
+        // Proceed with project saving if validation passes
+        $project = new Project();
+        $project->created_by = Auth::id();
+        $project->project_name = $validated['project_name'];
+        $project->fill($validated);
+        $project->save();
+    
+        // Handle Initial Files
+        if ($request->hasFile('initial_files')) {
+            foreach ($request->file('initial_files') as $file) {
+                $path = $file->store('projects/initial_files', 'public');
+                $project->initialFiles()->create([
+                    'file_path' => $path,
+                    'phase' => 'initial',
+                    'uploaded_by' => Auth::id()
+                ]);
+            }
+        }
+    
+        // Handle Technical Files
+        if ($request->hasFile('technical_files')) {
+            foreach ($request->file('technical_files') as $file) {
+                $path = $file->store('projects/technical_files', 'public');
+                $project->technicalFiles()->create([
+                    'file_path' => $path,
+                    'phase' => 'technical',
+                    'uploaded_by' => Auth::id()
+                ]);
+            }
+        }
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to create project!'
+            ], 500);
+        }
+        return redirect()->route('projects.index')->with('success', 'Project created successfully!');
     }
         
 
