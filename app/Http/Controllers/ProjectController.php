@@ -254,8 +254,8 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        $project->load('products.items');
-        return view('projects.show', compact('project'));
+        $items = item::all();
+        return view('projects.show', compact('project','items'));
     }
 
     public function edit($id)
