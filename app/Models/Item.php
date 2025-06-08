@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = ['name', 'unit', 'selling_price', 'total_stock'];
+    use HasFactory;
+
+    protected $fillable = ['name', 'unit', 'price', 'description'];
 
     public function purchases()
     {
@@ -18,5 +20,4 @@ class Item extends Model
     {
         return $this->hasMany(Material::class);
     }
-    
 }

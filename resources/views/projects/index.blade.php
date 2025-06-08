@@ -11,13 +11,13 @@
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Item Name</th>
+                <th>Project Name</th>
                 @if(auth()->check() && auth()->user()->hasRole('Admin'))
                     <th>Client</th>
                 @endif
                 <th>Quantity</th>
                 <th>Delivery Date</th>
-                <th>Actions</th>
+                <th>Actions</th>    
             </tr>
         </thead>
     </table>
@@ -42,7 +42,7 @@
 $(function () {
     let columns = [
         { data: 'date', name: 'date' },
-        { data: 'item_name', name: 'item_name' },
+        { data: 'project_name', name: 'project_name' },
         { data: 'quantity', name: 'quantity' },
         { data: 'delivery_date', name: 'delivery_date' },
         { data: 'actions', name: 'actions', orderable: false, searchable: false }

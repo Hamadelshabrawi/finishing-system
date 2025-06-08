@@ -16,6 +16,8 @@ use App\Http\Controllers\ItemPurchaseController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailService;
 use App\Http\Controllers\OutsourceController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductItemController;
 
 
 
@@ -60,24 +62,27 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/materials/{material}', [MaterialController::class, 'update'])->name('materials.update');
     
 
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
-    });
-    
-    // Manager routes
-    Route::middleware(['auth', 'manager'])->group(function () {
-        Route::get('/manager/dashboard', function () {
-            return view('manager.dashboard');
-        })->name('manager.dashboard');
-    });
-    
-    // Technical routes
-    Route::middleware(['auth', 'technical'])->group(function () {
-        Route::get('/technical/dashboard', function () {
-            return view('technical.dashboard');
-        })->name('technical.dashboard');
+    // Admin routes (using Spatie permissions)
+    Route::middleware(['auth'])->group(function () {
+        Route::middleware(['role:admin'])->group(function () {
+            Route::get('/admin/dashboard', function () {
+                return view('admin.dashboard');
+            })->name('admin.dashboard');
+        });
+        
+        // Manager routes
+        Route::middleware(['role:manager'])->group(function () {
+            Route::get('/manager/dashboard', function () {
+                return view('manager.dashboard');
+            })->name('manager.dashboard');
+        });
+        
+        // Technical routes
+        Route::middleware(['role:technical'])->group(function () {
+            Route::get('/technical/dashboard', function () {
+                return view('technical.dashboard');
+            })->name('technical.dashboard');
+        });
     });
     
     // Client routes
@@ -95,6 +100,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('items/{item}/consume', [ItemPurchaseController::class, 'consume'])->name('item_purchases.consume');
 
     // outsources routes
+    Route::resource('outsources', OutsourceController::class);
+
+    // product items routes
+    Route::prefix('products/{product}')->group(function () {
+        Route::get('items', [ProductItemController::class, 'index'])->name('product.items.index');
+        Route::post('items', [ProductItemController::class, 'store'])->name('product.items.store');
+        Route::post('items/{item}', [ProductItemController::class, 'update'])->name('product.items.update');
+        Route::delete('items/{item_id}', [ProductItemController::class, 'destroy'])->name('product.items.destroy');
+    });
+
+    // products routes
+    Route::resource('products', ProductController::class);
     Route::resource('outsources', OutsourceController::class);
 
     Route::post('projects/{project}/outsources', [OutsourceController::class, 'store'])->name('outsources.store');

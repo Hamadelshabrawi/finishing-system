@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained();
             $table->string('outsource_name');
-            $table->string('boarder_note');
+            $table->text('boarder_note');
             $table->decimal('cost', 10, 2)->nullable();
             $table->decimal('quantity', 10, 2)->default(1);
             $table->timestamps();

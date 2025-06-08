@@ -47,8 +47,7 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        'admin' => \App\Http\Middleware\CheckUserType::class . ':admin',
-        'manager' => \App\Http\Middleware\CheckUserType::class . ':manager',
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'technical' => \App\Http\Middleware\CheckUserType::class . ':technical',
         'client' => \App\Http\Middleware\CheckUserType::class . ':client',
         'permission' => \App\Http\Middleware\CheckPermission::class,

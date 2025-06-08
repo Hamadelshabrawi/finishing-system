@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('user_type', ['Admin', 'Technical', 'Financial', 'operations_manager', 'Storekeeper', 'User']) 
-                  ->default('User')
-                  ->after('email');
+        Schema::table('product_items', function (Blueprint $table) {
+            //
         });
     }
 
@@ -23,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('product_items', function (Blueprint $table) {
             //
         });
     }

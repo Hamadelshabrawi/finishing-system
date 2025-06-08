@@ -81,7 +81,8 @@ class ItemController extends Controller
         Item::create($request->validate([
             'name' => 'required|unique:items',
             'unit' => 'required',
-            'selling_price' => 'required|numeric',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string|max:255',
         ]));
 
         return redirect()->route('items.index');

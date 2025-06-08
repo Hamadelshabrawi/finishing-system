@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Material extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'project_id',
         'item_id',
         'quantity',
         'notes',
+        'source',
+        'approval_status'
     ];
 
     const SOURCE_INVENTORY = 'inventory';
@@ -31,19 +35,34 @@ class Material extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function approvalLog()
+    {
+        return $this->morphOne(ApprovalLog::class, 'approvable');
+    }
+
+    public function setSourceAttribute($value)
+    {
+        $this->attributes['source'] = $value;
+    }
+
+    public function setApprovalStatusAttribute($value)
+    {
+        $this->attributes['approval_status'] = $value;
+    }
+
     public function isManual()
     {
-        return $this->material_source === self::SOURCE_MANUAL;
+        return $this->source === self::SOURCE_MANUAL;
     }
 
     public function isInventory()
     {
-        return $this->material_source === self::SOURCE_INVENTORY;
+        return $this->source === self::SOURCE_INVENTORY;
     }
 
     public function scopePendingManual($query)
     {
-        return $query->where('material_source', self::SOURCE_MANUAL)
+        return $query->where('source', self::SOURCE_MANUAL)
                      ->where('approval_status', self::APPROVAL_PENDING);
     }
     

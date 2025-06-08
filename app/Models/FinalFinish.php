@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinalFinish extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'project_id', 'internal_paint', 'electrostatic', 'pvd', 'polishing'
     ];

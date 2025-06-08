@@ -1,0 +1,42 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ */
+class ProjectFactory extends Factory
+{
+    protected $model = Project::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'item_name' => $this->faker->word,
+            'project_name' => $this->faker->sentence(3),
+            'quantity' => $this->faker->numberBetween(1, 100),
+            'execution_period' => $this->faker->numberBetween(1, 12), // Changed to just integer value
+            'delivery_date' => $this->faker->dateTimeBetween('now', '+6 months'),
+            'delivery_location' => $this->faker->address,
+            'client_id' => \Database\Factories\ClientFactory::new()->create()->id, // Use a random existing client
+            'panel_number' => $this->faker->numberBetween(1, 50),
+            'description' => $this->faker->paragraph,
+            'print' => $this->faker->randomElement(['one_to_one', 'A3', 'A4']),
+            'initial_approval' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
+            'technical_approval' => $this->faker->randomElement(['pending', 'approved', 'need_modify', 'dismissed']),
+            'created_by' => 1, // Admin user ID
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+}

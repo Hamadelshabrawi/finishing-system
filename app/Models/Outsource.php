@@ -9,6 +9,14 @@ class Outsource extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['project_id','outsource_name','boarder_note','cost','quantity'];
+    protected $fillable = ['project_id', 'product_id', 'outsource_name', 'boarder_note', 'cost', 'quantity'];
+
+    /**
+     * Get the product that owns the outsource.
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 
 }

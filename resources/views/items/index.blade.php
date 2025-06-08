@@ -4,7 +4,7 @@
 
 
 @section('content')
-    <h1>Projects</h1>
+    <h1>Items</h1>
     <a href="{{ route('items.create') }}" class="btn btn-primary mb-3">Add New Item</a>
 
     <table class="table table-bordered" id="projects-table">
@@ -48,8 +48,8 @@ $(function () {
         },
         { data: 'name', name: 'name' },
         { data: 'unit', name: 'unit' },
-        { data: 'selling_price', name: 'selling_price' },
-        { data: 'total_stock', name: 'total_stock' },
+        { data: 'price', name: 'price' },
+        { data: 'description', name: 'description' },
         { data: 'actions', name: 'actions', orderable: false, searchable: false }
     ];
 
