@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('final_finishes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade')->unique();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade')->unique();
             $table->text('internal_paint')->nullable(); // دهانات داخلية
             $table->text('electrostatic')->nullable();  // الكتروستاتيك
             $table->text('pvd')->nullable();            // PVD

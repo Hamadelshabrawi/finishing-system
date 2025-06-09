@@ -55,9 +55,14 @@ class Product extends Model
         return $this->hasMany(Outsource::class);
     }
 
-    public function note()
+    public function ProductNote()
     {
-        return $this->hasOne(ProductNote::class);
+        return $this->hasOne(ProductNote::class, 'product_id', 'id');
+    }
+
+    public function finalFinish()
+    {
+        return $this->hasOne(FinalFinish::class, 'product_id', 'id');
     }
 
     /**

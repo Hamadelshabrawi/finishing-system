@@ -13,8 +13,8 @@ class FinalFinish extends Model
         'project_id', 'internal_paint', 'electrostatic', 'pvd', 'polishing'
     ];
 
-    public function project()
+    public function product()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Product::class, 'project_id', 'id');
     }
 }

@@ -225,7 +225,7 @@
                                     <td>{{ $product->description }}</td>
                                     <td>{{ $product->items->count() }}</td>
                                     <td>{{ $product->outsources->count() }}</td>
-                                    <td>{{ $product->generalNotes->count() }}</td>
+                                    <td>{{ isset($product->ProductNote) ? '1' : '0' }}</td>
                                     <td>{{ $product->finalFinishes->count() }}</td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Product actions">

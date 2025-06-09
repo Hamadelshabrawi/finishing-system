@@ -38,7 +38,7 @@
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Items</h5>
-                                    <a href="{{ route('product.items.index', $product->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('product.items.index', $product->id) }}" class="btn btn-primary ">
                                         <i class="fas fa-edit me-2"></i>Manage Items
                                     </a>
                                 </div>
@@ -77,9 +77,9 @@
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Outsources</h5>
-                                    <a href="{{ route('product.outsources.index', $product->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit me-2"></i>Manage Outsources
-                                    </a>
+                                        <a href="{{ route('product.outsources.index', $product) }}" class="btn btn-primary">
+                                            <i class="fas fa-external-link-alt me-2"></i>Manage Outsourcing
+                                        </a>
                                 </div>
                                 <div class="card-body">
                                     @if($product->outsources->isEmpty())
@@ -110,6 +110,78 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Final Finishes for {{ $product->name }}</h5>
+                                    <div class="btn-group">
+                                        @if(!$product->finalFinish)
+                                            <a href="{{ route('products.final-finish.create', $product) }}" class="btn btn-primary">
+                                                <i class="fas fa-plus me-2"></i>Add Final Finishes
+                                            </a>
+                                        @else
+                                            <a href="{{ route('products.final-finish.edit', $product) }}" class="btn btn-warning">
+                                                <i class="fas fa-edit me-2"></i>Edit Final Finishes
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    @if(!$product->finalFinish)
+                                        <p class="text-muted">No final finishes added yet.</p>
+                                    @else
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">Internal Paint (دهانات داخلية)</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->internal_paint }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">Electrostatic (الكتروستاتيك)</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->electrostatic }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">PVD</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->pvd }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">Polishing (فرش تلميع)</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->polishing }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row mt-4">
                         <div class="col-md-12">
@@ -119,7 +191,7 @@
                                         <h5 class="mb-0">Product Notes</h5>
                                         <div class="btn-group">
                                             @if(!isset($product->note?->note))
-                                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNoteModal">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNoteModal">
                                                 <i class="fas fa-plus me-2"></i>Add Note
                                             </button>
                                             @endif
@@ -140,7 +212,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    @if($product->note?->note)
+                                    @if($product->note)
                                         <p>{{ $product->note->note }}</p>
                                     @else
                                         <p class="text-muted">No notes added yet</p>

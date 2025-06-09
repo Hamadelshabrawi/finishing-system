@@ -113,6 +113,14 @@ Route::middleware(['auth'])->group(function () {
         Route::put('note', [ProductNoteController::class, 'update'])->name('product.note.update');
         Route::delete('note', [ProductNoteController::class, 'destroy'])->name('product.note.destroy');
 
+        // final finishes routes
+        Route::get('final-finish', [FinalFinishController::class, 'show'])->name('products.final-finish.show');
+        Route::get('final-finish/create', [FinalFinishController::class, 'create'])->name('products.final-finish.create');
+        Route::post('final-finish/create', [FinalFinishController::class, 'store'])->name('products.final-finish.store');
+        Route::get('final-finish/edit', [FinalFinishController::class, 'edit'])->name('products.final-finish.edit');
+        Route::put('final-finish/edit', [FinalFinishController::class, 'update'])->name('products.final-finish.update');
+        Route::delete('final-finish', [FinalFinishController::class, 'destroy'])->name('products.final-finish.destroy');
+
         // outsources routes
         Route::get('outsources', [OutsourceController::class, 'index'])->name('product.outsources.index');
         Route::post('outsources', [OutsourceController::class, 'store'])->name('product.outsources.store');
