@@ -18,6 +18,7 @@ use App\Http\Controllers\EmailService;
 use App\Http\Controllers\OutsourceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductItemController;
+use App\Http\Controllers\ProductNoteController;
 
 
 
@@ -99,24 +100,36 @@ Route::middleware(['auth'])->group(function () {
     Route::post('items/{item}/purchases', [ItemPurchaseController::class, 'store'])->name('item_purchases.store');
     Route::post('items/{item}/consume', [ItemPurchaseController::class, 'consume'])->name('item_purchases.consume');
 
-    // outsources routes
-    Route::resource('outsources', OutsourceController::class);
-
     // product items routes
     Route::prefix('products/{product}')->group(function () {
         Route::get('items', [ProductItemController::class, 'index'])->name('product.items.index');
         Route::post('items', [ProductItemController::class, 'store'])->name('product.items.store');
         Route::post('items/{item}', [ProductItemController::class, 'update'])->name('product.items.update');
         Route::delete('items/{item_id}', [ProductItemController::class, 'destroy'])->name('product.items.destroy');
+
+        // product notes routes
+        Route::get('note', [ProductNoteController::class, 'show'])->name('product.note.show');
+        Route::post('note', [ProductNoteController::class, 'store'])->name('product.note.store');
+        Route::put('note', [ProductNoteController::class, 'update'])->name('product.note.update');
+        Route::delete('note', [ProductNoteController::class, 'destroy'])->name('product.note.destroy');
+
+        // outsources routes
+        Route::get('outsources', [OutsourceController::class, 'index'])->name('product.outsources.index');
+        Route::post('outsources', [OutsourceController::class, 'store'])->name('product.outsources.store');
+        Route::post('outsources/{outsource}', [OutsourceController::class, 'update'])->name('product.outsources.update');
+        Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('product.outsources.destroy');
+        Route::get('outsources/create', [OutsourceController::class, 'create'])->name('product.outsources.create');
+        Route::get('outsources/{outsource}/edit', [OutsourceController::class, 'edit'])->name('product.outsources.edit');
     });
 
     // products routes
     Route::resource('products', ProductController::class);
-    Route::resource('outsources', OutsourceController::class);
 
-    Route::post('projects/{project}/outsources', [OutsourceController::class, 'store'])->name('outsources.store');
-    Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('outsources.destroy');
-    Route::post('/general-note', [OutsourceController::class, 'general_note'])->name('general-note.store');
+    // Remove old outsources routes
+    // Route::resource('outsources', OutsourceController::class);
+    // Route::post('projects/{project}/outsources', [OutsourceController::class, 'store'])->name('outsources.store');
+    // Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('outsources.destroy');
+    // Route::post('/general-note', [OutsourceController::class, 'general_note'])->name('general-note.store');
 
 
     // Email Configuration

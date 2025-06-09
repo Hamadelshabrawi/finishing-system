@@ -5,10 +5,6 @@
 @section('content')
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    {{-- Custom font and background color are assumed to be handled by layouts.app --}}
-    {{-- Bootstrap CSS is also assumed to be included in layouts.app --}}
-
-    {{-- Main content area, without .container as per your instruction --}}
     <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">Product Items for "{{ $product->name }}"</h1>

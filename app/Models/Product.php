@@ -50,9 +50,14 @@ class Product extends Model
     /**
      * Get all outsources for this product
      */
-    public function outsources(): HasMany
+    public function outsources()
     {
         return $this->hasMany(Outsource::class);
+    }
+
+    public function note()
+    {
+        return $this->hasOne(ProductNote::class);
     }
 
     /**

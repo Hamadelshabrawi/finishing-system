@@ -7,92 +7,85 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Project;
 use App\Models\GeneralNote;
+use App\Models\Product;
 
 class OutsourceController extends Controller
 {
     // Display a listing of the resource
-    public function index()
+    public function index($productId)
     {
-        $outsources = Outsource::all();
-        return response()->json($outsources);
+        $product = Product::with('outsources')->findOrFail($productId);
+        return view('products.outsources.index', compact('product'));
     }
 
     // Show the form for creating a new resource
-    public function create()
+    public function create($productId)
     {
-        // If using API only, you might not need this.
-        return view('outsources.create');
-    }
-
-    // Store a newly created resource in storage
-    public function store(Request $request, $projectId)
-    {
-        $outsources = $request->input('outsources', []);
-    
-        foreach ($outsources as $outsourceData) {
-            Outsource::create([
-                'project_id' => $projectId,
-                'outsource_name' => $outsourceData['outsource_name'],
-                'boarder_note' => $outsourceData['boarder_note'] ?? null,
-                'cost' => $outsourceData['cost'],
-                'quantity' => $outsourceData['quantity'],
-            ]);
-        }
-    
-        return redirect()->back()->with('outsource_success', 'Outsources added successfully!');
-    }
-    
-
-    // Display the specified resource
-    public function show($id)
-    {
-        $outsource = Outsource::findOrFail($id);
-        return response()->json($outsource);
+        $product = Product::findOrFail($productId);
+        return view('products.outsources.create', compact('product'));
     }
 
     // Show the form for editing the specified resource
-    public function edit($id)
+    public function edit($productId, $outsourceId)
     {
-        $outsource = Outsource::findOrFail($id);
-        // If using API only, you might not need this.
-        return view('outsources.edit', compact('outsource'));
+        $product = Product::findOrFail($productId);
+        $outsource = Outsource::findOrFail($outsourceId);
+        return view('products.outsources.edit', compact('product', 'outsource'));
     }
 
-    public function update(Request $request, Outsource $outsource)
+    // Store a newly created resource in storage
+    public function store(Request $request, $productId)
     {
         $validated = $request->validate([
             'outsource_name' => 'required|string|max:255',
-            'cost' => 'required|numeric',
-            'quantity' => 'required|numeric',
+            'cost' => 'required|numeric|min:0',
+            'quantity' => 'required|numeric|min:1',
             'boarder_note' => 'nullable|string',
         ]);
-    
-        $outsource->update($validated);
-    
-        return redirect()->back()->with('outsource_success', 'Outsource updated successfully!');
-    }
-    
-    // Remove the specified resource from storage
-    public function destroy($id)
-    {
-        $outsource = Outsource::findOrFail($id);
-        $outsource->delete();
-    
-        return redirect()->back()->with('success', 'Record deleted successfully')->with('tab', 'tab3');
-    }
 
-    public function general_note(Request $request)
-    {
-        $validated = $request->validate([
-            'project_id' => 'required|exists:projects,id',
-            'Note' => 'required|string|max:1000',
+        Outsource::create([
+            'product_id' => $productId,
+            'project_id' => $request->project_id,
+            'outsource_name' => $validated['outsource_name'],
+            'boarder_note' => $validated['boarder_note'] ?? null,
+            'cost' => $validated['cost'],
+            'quantity' => $validated['quantity'],
         ]);
 
-        GeneralNote::updateOrCreate(
-            ['project_id' => $validated['project_id']],
-            ['Note' => $validated['Note']]
-        );
+        return redirect()->back()->with('success', 'Outsource added successfully!');
+    }
 
-        return redirect()->back()->with('note_success', 'Note saved successfully!');
+    // Update the specified resource in storage
+    public function update(Request $request, $productId, $outsourceId)
+    {
+        $validated = $request->validate([
+            'outsource_name' => 'required|string|max:255',
+            'cost' => 'required|numeric|min:0',
+            'quantity' => 'required|numeric|min:1',
+            'boarder_note' => 'nullable|string',
+        ]);
+
+        $outsource = Outsource::findOrFail($outsourceId);
+        
+        if ($outsource->product_id != $productId) {
+            return redirect()->back()->with('error', 'Unauthorized action');
+        }
+
+        $outsource->update($validated);
+
+        return redirect()->back()->with('success', 'Outsource updated successfully!');
+    }
+
+    // Remove the specified resource from storage
+    public function destroy($productId, $outsourceId)
+    {
+        $outsource = Outsource::findOrFail($outsourceId);
+        
+        if ($outsource->product_id != $productId) {
+            return redirect()->back()->with('error', 'Unauthorized action');
+        }
+        
+        $outsource->delete();
+        return redirect()->back()->with('success', 'Outsource deleted successfully!');
     }
 }
