@@ -20,8 +20,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductItemController;
 use App\Http\Controllers\ProductNoteController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,8 +32,8 @@ use App\Http\Controllers\ProductNoteController;
 */
 
 Route::middleware(['auth'])->group(function() {
-    Route::get('/', function () { return view('home');});
-});
+    Route::get('/', [HomeController::class, 'index']);
+    });
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {
         session()->put('locale', $locale);
@@ -49,8 +47,20 @@ Auth::routes();
 
 Auth::routes(['register' => true]);
 
+// Product routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+});
+
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/export/{id}', [ProjectController::class, 'exportProject'])->name('projects.export');
     Route::get('/email/{id}', [ProjectController::class, 'emailProject'])->name('projects.email');

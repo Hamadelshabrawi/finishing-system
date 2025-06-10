@@ -43,7 +43,7 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        return redirect()->route('projects.show', $validated['project_id'])->with('success', 'Product created successfully');
+        return redirect()->route('products.show', $product->id)->with('success', 'Product created successfully');
     }
 
     /**

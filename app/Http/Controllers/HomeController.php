@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Models\Project;
+use App\Models\Product;
+use App\Models\Client;
+use App\Models\Material;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -25,7 +30,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = User::find(auth()->user());
-        return view('home', compact('user'));
+        $stats = [
+            'total_projects' => \App\Models\Project::count(),
+            'total_products' => \App\Models\Product::count(),
+            'total_clients' => \App\Models\Client::count(),
+            'total_materials' => \App\Models\Material::count()
+        ];
+        return view('home', compact('stats'));
     }
 }

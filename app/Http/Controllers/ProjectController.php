@@ -33,11 +33,14 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $projects = Project::with('client')->select('projects.*');
+            $projects = Project::with(['client', 'products'])->select('projects.*');
     
             return DataTables::eloquent($projects)
                 ->addColumn('client_name', function($project) {
                     return $project->client ? $project->client->name : 'N/A';
+                })
+                ->addColumn('product_count', function($project) {
+                    return $project->products->count();
                 })
                 ->addColumn('actions', function($project) {
                     $actions = '';

@@ -20,7 +20,7 @@ class FinalFinishFactory extends Factory
     public function definition(): array
     {
         return [
-            'project_id' => \App\Models\Project::factory(),
+            'product_id' => \App\Models\Product::factory(),
             'internal_paint' => $this->faker->boolean,
             'electrostatic' => $this->faker->boolean,
             'pvd' => $this->faker->boolean,

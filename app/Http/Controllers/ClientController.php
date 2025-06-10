@@ -63,7 +63,7 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|unique:clients,email',
-            'phone' => 'nullable|string|max:15',
+            'phone' => 'nullable|string',
             'company_name' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'tax_number' => 'nullable|string|max:50',
@@ -75,7 +75,20 @@ class ClientController extends Controller
         $client->fill($validated);
         $client->created_by = auth()->id();
         $client->save();
-    
+
+        // Log client creation
+        SystemLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'client_created',
+            'description' => 'Client created: ' . $validated['name'],
+            'data' => [
+                'client_id' => $client->id,
+                'client_name' => $client->name,
+                'client_type' => $client->type,
+                'created_by' => auth()->id()
+            ]
+        ]);
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,

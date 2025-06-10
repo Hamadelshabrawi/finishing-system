@@ -24,13 +24,20 @@ class DatabaseSeeder extends Seeder
         // Seed roles and permissions
         $this->call(RolesAndPermissionsSeeder::class);
         
-        // Create admin user
-        \App\Models\User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
-            'user_type' => 'admin'
-        ])->assignRole('admin');
+        // Create admin user if it doesn't exist
+        $adminUser = \App\Models\User::where('email', 'admin@admin.com')->first();
+        if (!$adminUser) {
+            $adminUser = \App\Models\User::create([
+                'name' => 'Admin User',
+                'email' => 'admin@admin.com',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'user_type' => 'Admin'
+            ]);
+            $adminUser->assignRole('Admin');
+        }
+        
+        // Create items first
+        \App\Models\Item::factory()->count(25)->create();
         
         // Create 5 clients
         \App\Models\Client::factory(5)->create();
@@ -41,9 +48,6 @@ class DatabaseSeeder extends Seeder
                 \App\Models\Product::factory(3)
             )
             ->create();
-        
-        // Create items first
-        \App\Models\Item::factory()->count(25)->create();
         
         // Then create other models
         \App\Models\User::factory()->count(10)->create();

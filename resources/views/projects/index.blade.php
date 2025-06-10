@@ -15,7 +15,7 @@
                 @if(auth()->check() && auth()->user()->hasRole('Admin'))
                     <th>Client</th>
                 @endif
-                <th>Quantity</th>
+                <th>Products</th>
                 <th>Delivery Date</th>
                 <th>Actions</th>    
             </tr>
@@ -43,7 +43,7 @@ $(function () {
     let columns = [
         { data: 'date', name: 'date' },
         { data: 'project_name', name: 'project_name' },
-        { data: 'quantity', name: 'quantity' },
+        { data: 'product_count', name: 'product_count' },
         { data: 'delivery_date', name: 'delivery_date' },
         { data: 'actions', name: 'actions', orderable: false, searchable: false }
     ];

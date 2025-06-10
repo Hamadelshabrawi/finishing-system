@@ -90,7 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'name' => 'Admin User',
                 'email' => 'admin@admin.com',
                 'password' => bcrypt('password'),
-                'user_type' => 'admin'
+                'user_type' => 'Admin'
             ]);
         }
 
