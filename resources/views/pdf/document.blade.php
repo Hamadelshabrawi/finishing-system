@@ -121,16 +121,16 @@
     <div class="container">
         <h2>أمر تشغيل</h2>
         
-        <div class="project-title">{{ $project->item_name }}</div>
+        <div class="project-title">{{ $project->project_name }}</div>
         
         <table>
             <tr class="header-row">
                 <td width="15%"><strong>التاريخ</strong></td>
                 <td width="15%">{{ \Carbon\Carbon::parse($project->date)->format('Y-m-d') }}</td>
                 <td width="15%"><strong>البند</strong></td>
-                <td width="15%">{{ $project->item_name }}</td>
+                <td width="15%">{{ $project->project_name }}</td>
                 <td width="15%"><strong>الكمية</strong></td>
-                <td width="15%">{{ $project->quantity }}</td>
+                <td width="15%">{{ $project->contact_value }}</td>
             </tr>
             <tr>
                 <td><strong>مدة التنفيذ</strong></td>
@@ -139,26 +139,6 @@
                 <td>{{ \Carbon\Carbon::parse($project->delivery_date)->format('Y-m-d') }}</td>
                 <td><strong>مكان التوريد</strong></td>
                 <td>{{ $project->delivery_location }}</td>
-            </tr>
-            <tr>
-                <td><strong>اسم/رقم اللوحة</strong></td>
-                <td>{{ $project->panel_number }}</td>
-                <td><strong>طباعة</strong></td>
-                <td>
-                    <label class="checkbox-label">
-                        <input type="checkbox" {{ $project->print == 'one_to_one' ? 'checked="checked"' : '' }}> 1:1
-                    </label>
-                </td>
-                <td>
-                    <label class="checkbox-label">
-                        <input type="checkbox" {{ $project->print == 'A3' ? 'checked="checked"' : '' }}> A3
-                    </label>
-                </td>
-                <td>
-                    <label class="checkbox-label">
-                        <input type="checkbox" {{ $project->print == 'A4' ? 'checked="checked"' : '' }}> A4
-                    </label>
-                </td>
             </tr>
         </table>
         
@@ -242,30 +222,6 @@
                 <td>{{ $outsource->cost }}</td>
             </tr>
             @endforeach
-        </table>
-        
-        <div class="section-title">ملاحظات عامة</div>
-        <table>
-            <tr class="notes-row">
-                <td>{{$project->generalNote->Note ?? ' '}}</td>
-            </tr>
-        </table>
-        
-        <table class="signature-table">
-            <tr>
-                <td width="33%">
-                    <div class="signature-line"></div>
-                    <div>مدير الإنتاج</div>
-                </td>
-                <td width="33%">
-                    <div class="signature-line"></div>
-                    <div>مسؤول التشغيل</div>
-                </td>
-                <td width="33%">
-                    <div class="signature-line"></div>
-                    <div>مدير المشروع</div>
-                </td>
-            </tr>
         </table>
     </div>
 </body>

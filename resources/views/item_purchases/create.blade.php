@@ -12,9 +12,9 @@
             @error('purchase_price') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
         <div class="mb-3">
-            <label>Quantity</label>
-            <input type="number" name="quantity" class="form-control" value="{{ old('quantity') }}" required>
-            @error('quantity') <div class="text-danger">{{ $message }}</div> @enderror
+            <label>Contact_value</label>
+            <input type="number" name="contact_value" class="form-control" value="{{ old('contact_value') }}" required>
+            @error('contact_value') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
         <div class="mb-3">
             <label>Purchase Date</label>

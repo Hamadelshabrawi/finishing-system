@@ -12,7 +12,6 @@ class AddPerformanceIndexes extends Migration
             $table->index('client_id');
             $table->index('created_by');
             $table->index('delivery_date');
-            $table->index('initial_approval');
             $table->index('technical_approval');
         });
 
@@ -40,7 +39,6 @@ class AddPerformanceIndexes extends Migration
             $table->dropIndex(['client_id']);
             $table->dropIndex(['created_by']);
             $table->dropIndex(['delivery_date']);
-            $table->dropIndex(['initial_approval']);
             $table->dropIndex(['technical_approval']);
         });
 

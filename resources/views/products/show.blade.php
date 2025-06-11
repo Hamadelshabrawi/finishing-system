@@ -190,30 +190,31 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Product Notes</h5>
                                         <div class="btn-group">
-                                            @if(!isset($product->note?->note))
+                                            @if(!isset($product->ProductNote?->note))
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNoteModal">
                                                 <i class="fas fa-plus me-2"></i>Add Note
                                             </button>
-                                            @endif
+                                            @else
                                             <button type="button" class="btn btn-sm btn-warning edit-note-btn" 
-                                                style="display: none;"
-                                                data-note="{{ $product->note?->note ?? '' }}"
+                                                
+                                                data-note="{{ $product->ProductNote?->note ?? '' }}"
                                                 data-toggle="modal"
                                                 data-target="#editNoteModal">
                                                 <i class="fas fa-edit me-2"></i>Edit Note
                                             </button>
                                             <button type="button" class="btn btn-sm btn-danger delete-note-btn" 
-                                                style="display: none;"
+                                                
                                                 data-toggle="modal"
                                                 data-target="#deleteNoteModal">
                                                 <i class="fas fa-trash me-2"></i>Delete Note
                                             </button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    @if($product->note)
-                                        <p>{{ $product->note->note }}</p>
+                                    @if($product->ProductNote)
+                                        <p>{{ $product->ProductNote->note }}</p>
                                     @else
                                         <p class="text-muted">No notes added yet</p>
                                     @endif

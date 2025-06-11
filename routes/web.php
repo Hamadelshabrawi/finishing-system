@@ -33,6 +33,7 @@ use App\Http\Controllers\ProductNoteController;
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/', [HomeController::class, 'index']);
+    Route::get('/timeline-data', [HomeController::class, 'getTimelineData']);
     });
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {
@@ -100,6 +101,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('projects', ProjectController::class);
         Route::resource('clients', ClientController::class);
+    Route::get('clients/search', [ClientController::class, 'search'])->name('clients.search');
     });
 
     // Items routes
@@ -142,13 +144,6 @@ Route::middleware(['auth'])->group(function () {
 
     // products routes
     Route::resource('products', ProductController::class);
-
-    // Remove old outsources routes
-    // Route::resource('outsources', OutsourceController::class);
-    // Route::post('projects/{project}/outsources', [OutsourceController::class, 'store'])->name('outsources.store');
-    // Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('outsources.destroy');
-    // Route::post('/general-note', [OutsourceController::class, 'general_note'])->name('general-note.store');
-
 
     // Email Configuration
         Route::get('/config', [EmailController::class, 'config'])->name('email.config');

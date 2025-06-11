@@ -63,36 +63,6 @@ Send Email
                 </div>
                 @endif
 
-                <!-- Technical Files Section -->
-                @if($project->technicalFiles->count() > 0)
-                <div class="mb-3">
-                    <label class="fw-bold form-label">Technical Documents:</label>
-                    <div class="list-group mb-2">
-                        @foreach($project->technicalFiles as $file)
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <a href="{{ Storage::url($file->file_path) }}" 
-                                class="btn btn-sm btn-outline-primary me-2"
-                                target="_blank"
-                                download="{{ basename($file->file_path) }}">
-                                <i class="fas fa-download"></i> Download
-                                </a>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" 
-                                        name="existing_attachments[]" 
-                                        value="{{ $file->file_path }}" 
-                                        id="technical-{{ $file->id }}" checked>
-                                    <label class="form-check-label" for="technical-{{ $file->id }}">
-                                        Attach to email
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
                 <!-- Additional Files -->
                 <div class="mb-4">
                     <label class="form-label">Additional Attachments:</label>

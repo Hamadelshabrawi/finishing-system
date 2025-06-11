@@ -6,7 +6,6 @@ use App\Models\Outsource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Project;
-use App\Models\GeneralNote;
 use App\Models\Product;
 
 class OutsourceController extends Controller

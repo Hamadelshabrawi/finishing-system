@@ -44,7 +44,7 @@
         {{-- Project Overview Card (incorporates detailed project information) --}}
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">{{ $project->item_name }}</h3>
+                <h3 class="card-title mb-0">{{ $project->project_name }}</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -55,13 +55,15 @@
                             <div class="row">
                                 <div class="col-6">
                                     <p><strong>Date:</strong><br> {{ \Carbon\Carbon::parse($project->date)->format('M d, Y') }}</p>
-                                    <p><strong>Quantity:</strong><br> {{ $project->quantity }}</p>
+                                    <p><strong>Contact Value:</strong><br> {{ $project->contact_value }}</p>
                                     <p><strong>Execution Period:</strong><br> {{ $project->execution_period }} days</p>
                                 </div>
+                               
+                            </div>
+                            <div class="row">
                                 <div class="col-6">
                                     <p><strong>Delivery Date:</strong><br> {{ \Carbon\Carbon::parse($project->delivery_date)->format('M d, Y') }}</p>
                                     <p><strong>Delivery Location:</strong><br> {{ $project->delivery_location }}</p>
-                                    <p><strong>Panel Number:</strong><br> {{ $project->panel_number }}</p>
                                 </div>
                             </div>
                         </div>
@@ -94,6 +96,37 @@
                                             <i class="fas fa-envelope"></i> {{ $project->client->email }}
                                         @endif
                                     </p>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <p><strong>Contact :</strong><br>
+
+                                    @if($project->contacts->count() > 0)
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Position</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($project->contacts as $contact)
+                                                        <tr>
+                                                            <td>{{ $contact->name }}</td>
+                                                            <td>{{ $contact->position }}</td>
+                                                            <td>{{ $contact->phone_number }}</td>
+                                                            <td>{{ $contact->email }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @else
+                                        <p>No contacts added for this project.</p>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -135,35 +168,6 @@
                                 </div>
                             @else
                                 <div class="alert alert-info">No initial files uploaded.</div>
-                            @endif
-                        </div>
-                    </div>
-
-                    {{-- Technical Files --}}
-                    <div class="col-md-6">
-                        <div class="info-section">
-                            <h5 class="section-title border-bottom pb-2 mb-3">
-                                <i class="fas fa-file-code text-success"></i> Technical Files
-                                <span class="badge bg-secondary float-end">{{ $project->technicalFiles->count() }}</span>
-                            </h5>
-
-                            @if($project->technicalFiles->count())
-                                <div class="file-list">
-                                    @foreach($project->technicalFiles as $file)
-                                        <div class="file-item d-flex justify-content-between align-items-center p-2 border-bottom">
-                                            <div>
-                                                <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                                    <i class="fas fa-eye"></i> View
-                                                </a>
-                                                <a href="{{ asset('storage/'.$file->file_path) }}" download class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-download"></i> Download
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="alert alert-info">No technical files uploaded.</div>
                             @endif
                         </div>
                     </div>

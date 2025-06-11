@@ -136,7 +136,9 @@ $(document).ready(function() {
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         language: {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
-        }
+        },
+        order: [[8, 'desc']]
+
     });
 
     // Delete confirmation

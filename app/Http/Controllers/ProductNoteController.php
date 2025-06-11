@@ -10,7 +10,8 @@ class ProductNoteController extends Controller
 {
     public function show(Product $product)
     {
-        return response()->json($product->note?->note ?? '');
+        $latestNote = $product->notes()->latest()->first();
+        return response()->json($latestNote?->note ?? '');
     }
 
     public function store(Request $request, Product $product)
@@ -19,8 +20,9 @@ class ProductNoteController extends Controller
             'note' => 'required|string|max:65535',
         ]);
 
-        $product->note()->create([
-            'note' => $validated['note']
+        $product->ProductNote()->create([
+            'note' => $validated['note'],
+            'product_id' => $product->id
         ]);
 
         return redirect()->back()->with('success', 'Note added successfully');
@@ -32,17 +34,21 @@ class ProductNoteController extends Controller
             'note' => 'required|string|max:65535',
         ]);
 
-        $product->note()->update([
-            'note' => $validated['note']
-        ]);
+        $note = $product->ProductNote()->latest()->first();
+        if ($note) {
+            $note->update([
+                'note' => $validated['note']
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Note updated successfully');
     }
 
     public function destroy(Product $product)
     {
-        if ($product->note) {
-            $product->note()->delete();
+        $note = $product->ProductNote()->latest()->first();
+        if ($note) {
+            $note->delete();
         }
 
         return redirect()->back()->with('success', 'Note deleted successfully');

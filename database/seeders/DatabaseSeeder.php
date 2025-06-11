@@ -12,7 +12,6 @@ use App\Models\FinalFinish;
 use App\Models\ItemPurchase;
 use App\Models\Job;
 use App\Models\Outsource;
-use App\Models\GeneralNote;
 
 class DatabaseSeeder extends Seeder
 {
@@ -58,7 +57,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\ItemPurchase::factory()->count(10)->create();
         \App\Models\Job::factory()->count(10)->create();
         \App\Models\Outsource::factory()->count(10)->create();
-        \App\Models\GeneralNote::factory()->count(10)->create();
         \App\Models\Product::factory()->count(10)->create();
     }
 }

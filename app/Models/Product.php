@@ -10,7 +10,6 @@ use App\Models\Item;
 use App\Models\ProductItem;
 use App\Models\Project;
 use App\Models\Outsource;
-use App\Models\GeneralNote;
 use App\Models\FinalFinish;
 
 class Product extends Model
@@ -65,13 +64,6 @@ class Product extends Model
         return $this->hasOne(FinalFinish::class, 'product_id', 'id');
     }
 
-    /**
-     * Get all general notes for this product
-     */
-    public function generalNotes(): HasMany
-    {
-        return $this->hasMany(GeneralNote::class);
-    }
 
     /**
      * Get all final finishes for this product

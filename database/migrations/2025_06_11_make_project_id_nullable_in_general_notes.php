@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->enum('print', ['one_to_one', 'A3', 'A4'])->default('A4')->after('technical_approval');
+        Schema::table('general_notes', function (Blueprint $table) {
+            $table->foreignId('project_id')->nullable()->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            //
+        Schema::table('general_notes', function (Blueprint $table) {
+            $table->foreignId('project_id')->nullable(false)->change();
         });
     }
 };

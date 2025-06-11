@@ -6,6 +6,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SystemLog;
 
 class ClientController extends Controller
 {
@@ -98,6 +99,22 @@ class ClientController extends Controller
     
         return redirect()->route('clients.index')->with('success', 'Client created successfully!');
     }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        
+        if (empty($searchTerm)) {
+            return response()->json(['clients' => []]);
+        }
+
+        $clients = Client::where('name', 'like', '%' . $searchTerm . '%')
+            ->orWhere('email', 'like', '%' . $searchTerm . '%')
+            ->orWhere('phone', 'like', '%' . $searchTerm . '%')
+            ->get(['id', 'name']);
+
+        return response()->json(['clients' => $clients]);
+    }
     
 
     public function edit(Client $client)
@@ -135,8 +152,38 @@ class ClientController extends Controller
 
     public function destroy(Client $client)
     {
+        // Check if client is being used in any projects
+        if ($client->projects()->count() > 0) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete client because it is associated with one or more projects.'
+                ], 400);
+            }
+            return redirect()->back()->with('error', 'Cannot delete client because it is associated with one or more projects.');
+        }
+
+        // Log client deletion
+        SystemLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'client_deleted',
+            'description' => 'Client deleted: ' . $client->name,
+            'data' => [
+                'client_id' => $client->id,
+                'client_name' => $client->name,
+                'client_type' => $client->type
+            ]
+        ]);
+
         $client->delete(); // Soft delete the client
-        
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Client deleted successfully'
+            ]);
+        }
+
         return redirect()->route('clients.index')->with('success', 'Client deleted successfully!');
     }
 
