@@ -61,15 +61,11 @@ class Product extends Model
 
     public function finalFinish()
     {
-        return $this->hasOne(FinalFinish::class, 'product_id', 'id');
+        return $this->hasOne(FinalFinish::class);
     }
 
-
-    /**
-     * Get all final finishes for this product
-     */
-    public function finalFinishes(): HasMany
+    public function files()
     {
-        return $this->hasMany(FinalFinish::class);
+        return $this->hasMany(ProductFile::class);
     }
 }

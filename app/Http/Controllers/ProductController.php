@@ -51,7 +51,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::with(['project', 'items', 'outsources', 'finalFinishes'])
+        $product = Product::with(['project', 'items', 'outsources', 'finalFinish', 'ProductNote', 'files'])
             ->findOrFail($id);
 
         return view('products.show', compact('product'));

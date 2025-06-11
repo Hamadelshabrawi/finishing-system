@@ -44,7 +44,7 @@
 
                         <div class="mb-3">
                             <label for="note" class="form-label">Note</label>
-                            <textarea class="form-control @error('note') is-invalid @enderror" id="note" name="note" rows="3">{{ $product->notes()->latest()->first()?->note ?? '' }}</textarea>
+                            <textarea class="form-control @error('note') is-invalid @enderror" id="note" name="note" rows="3">{{ $product->ProductNote()->note ?? '' }}</textarea>
                             @error('note')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -72,7 +72,7 @@
                     
                     // Submit note first
                     $.ajax({
-                        url: '{{ route('product.notes.store', $product->id) }}',
+                        url: '{{ route('product.note.store', $product->id) }}',
                         method: 'POST',
                         data: {
                             note: $('textarea[name="note"]').val(),

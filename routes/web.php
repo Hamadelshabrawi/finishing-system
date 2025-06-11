@@ -19,6 +19,7 @@ use App\Http\Controllers\OutsourceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductItemController;
 use App\Http\Controllers\ProductNoteController;
+use App\Http\Controllers\ProductFileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/export/{id}/{lang?}', [ProjectController::class, 'exportProject'])->name('projects.export');
+    
+    // Product Files Routes
+    Route::prefix('products/{product}')->group(function () {
+        Route::post('files', [ProductFileController::class, 'store'])->name('products.files.store');
+        Route::delete('files/{file}', [ProductFileController::class, 'destroy'])->name('products.files.destroy');
+        Route::get('files/{file}/download', [ProductFileController::class, 'download'])->name('products.files.download');
+    });
+
     Route::get('/email/{id}', [ProjectController::class, 'emailProject'])->name('projects.email');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
