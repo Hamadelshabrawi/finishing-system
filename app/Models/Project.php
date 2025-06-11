@@ -90,7 +90,7 @@ class Project extends Model
 
     public function contacts()
     {
-        return $this->hasMany(ProjectContact::class);
+        return $this->hasOne(ProjectContact::class);
     }
 
     public function creator()
