@@ -63,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/export/{id}', [ProjectController::class, 'exportProject'])->name('projects.export');
+    Route::get('/export/{id}/{lang?}', [ProjectController::class, 'exportProject'])->name('projects.export');
     Route::get('/email/{id}', [ProjectController::class, 'emailProject'])->name('projects.email');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');

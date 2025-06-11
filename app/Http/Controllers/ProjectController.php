@@ -143,30 +143,30 @@ class ProjectController extends Controller
         $fontDirs = $defaultConfig['fontDir'];
     
         $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
-        $fontData = $defaultFontConfig['fontdata'];
-    
-        $mpdf = new \Mpdf\Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'fontDir' => array_merge($fontDirs, [resource_path('fonts')]),
-            'fontdata' => $fontData + [
-            'tajawal' => [
-        'R' => 'Tajawal-Regular.ttf',
-        'B' => 'Tajawal-Bold.ttf',
-        'useOTL' => 0xFF,
-        'useKashida' => 75,
-    ]
-    ],
-
-            'default_font' => 'tajawal',
-            'directionality' => 'rtl',
+        $config = [
             'margin_top' => 20,
             'margin_right' => 15,
             'margin_left' => 15,
             'margin_bottom' => 20,
-        ]);
-    
-        $html = view('pdf.document', compact('project'))->render();
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'fontDir' => array_merge($fontDirs, [resource_path('fonts')]),
+            'fontdata' => array_merge($defaultFontConfig['fontdata'], [
+                'tajawal' => [
+                    'R' => 'Tajawal-Regular.ttf',
+                    'B' => 'Tajawal-Bold.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ]
+            ])
+        ];
+
+        $mpdf = new \Mpdf\Mpdf($config);
+        if (request()->segment(3) === 'ar') {
+            $html = view('pdf.document_ar', compact('project'))->render();
+        } else {
+            $html = view('pdf.document_en', compact('project'))->render();
+        }
         $mpdf->WriteHTML($html);
         return $mpdf->Output('project_order_'.$project->id.'.pdf', 'I');
     }

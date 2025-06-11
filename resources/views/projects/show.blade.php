@@ -14,9 +14,14 @@
             <h1 class="mb-0">Project Details</h1>
 
             <div class="d-flex flex-column flex-sm-row space-y-2 space-sm-x-3">
-                <a href="{{ route('projects.export',$project->id) }}" class="btn btn-outline-dark">
-                    <i class="fas fa-file-export me-2"></i> Export to PDF
-                </a>
+                <div class="btn-group">
+                    <a href="{{ route('projects.export', [$project->id, 'ar']) }}" class="btn btn-outline-dark">
+                        <i class="fas fa-file-export me-2"></i> Export PDF (Arabic)
+                    </a>
+                    <a href="{{ route('projects.export', [$project->id, 'en']) }}" class="btn btn-outline-dark">
+                        <i class="fas fa-file-export me-2"></i> Export PDF (English)
+                    </a>
+                </div>
                 <a href="{{ route('projects.index') }}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-2"></i> Back to Projects
                 </a>
@@ -113,14 +118,12 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($project->contacts as $contact)
                                                         <tr>
-                                                            <td>{{ $contact->name }}</td>
-                                                            <td>{{ $contact->position }}</td>
-                                                            <td>{{ $contact->phone_number }}</td>
-                                                            <td>{{ $contact->email }}</td>
+                                                            <td>{{ $project->contacts->name ?? 'N/A' }}</td>
+                                                            <td>{{ $project->contacts->position ?? 'N/A' }}</td>
+                                                            <td>{{ $project->contacts->phone_number ?? 'N/A' }}</td>
+                                                            <td>{{ $project->contacts->email ?? 'N/A' }}</td>
                                                         </tr>
-                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
