@@ -264,10 +264,11 @@ class ProjectController extends Controller
             $project->fill($validated);
             $project->save();
 
-            // Save contacts if any
+            // Save single contact if provided
             if ($request->has('contacts')) {
-                foreach ($request->input('contacts') as $contact) {
-                    $project->contacts()->create($contact);
+                $contactData = $request->input('contacts')[0] ?? [];
+                if (!empty($contactData)) {
+                    $project->contacts()->create($contactData);
                 }
             }
 
@@ -471,24 +472,6 @@ public function update(Request $request, $id)
                         $project->technical_approval = Project::APPROVAL_NEED_MODIFY;
                         $project->save();
                     }
-                }
-            }
-        }
-
-        // Handle contacts
-        if ($request->has('contacts')) {
-            // Update existing contacts
-            foreach ($project->contacts as $contact) {
-                if (isset($contactData['id']) && $contact->id == $contactData['id']) {
-                    $contact->update($contactData);
-                    continue;
-                }
-            }
-            
-            // Create new contacts
-            foreach ($request->input('contacts', []) as $contactData) {
-                if (!isset($contactData['id'])) {
-                    $project->contacts()->create($contactData);
                 }
             }
         }

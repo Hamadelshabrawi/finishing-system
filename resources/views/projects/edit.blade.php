@@ -53,78 +53,37 @@
 
         <!-- Project Contacts -->
         <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title">Project Contacts</h5>
-            </div>
-            <div class="card-body">
-                <div id="contacts-container">
-                    <!-- Always show at least one contact form -->
-                    <div class="contact-row">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Name *</label>
-                                    <input type="text" name="contacts[0][name]" class="form-control" required value="{{ $project->contacts->first()?->name ?? '' }}">
-                                </div>
-                            </div>
-                            <input type="hidden" name="contacts[0][id]" value="{{ $project->contacts->first()?->id ?? '' }}">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Position *</label>
-                                    <input type="text" name="contacts[0][position]" class="form-control" required value="{{ $project->contacts->first()?->position ?? '' }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Phone Number</label>
-                                    <input type="tel" name="contacts[0][phone_number]" class="form-control" value="{{ $project->contacts->first()?->phone_number ?? '' }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" name="contacts[0][email]" class="form-control" value="{{ $project->contacts->first()?->email ?? '' }}">
-                                </div>
-                            </div>
+            <!-- Project Contact -->
+            <div class="col-12">
+                <h5 class="mb-3">Project Contact</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" name="contacts[0][name]" class="form-control" required value="{{ $project->contacts->first()?->name ?? '' }}">
                         </div>
                     </div>
-                    
-                    <!-- Show additional contacts if they exist -->
-                    @if($project->contacts->count() > 1)
-                        @foreach($project->contacts->slice(1) as $index => $contact)
-                            <div class="contact-row">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Name *</label>
-                                            <input type="text" name="contacts[{{ $index + 1 }}][name]" class="form-control" required value="{{ $contact->name }}">
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="contacts[{{ $index + 1 }}][id]" value="{{ $contact->id }}">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Position *</label>
-                                            <input type="text" name="contacts[{{ $index + 1 }}][position]" class="form-control" required value="{{ $contact->position }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Phone Number</label>
-                                            <input type="tel" name="contacts[{{ $index + 1 }}][phone_number]" class="form-control" value="{{ $contact->phone_number }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Email</label>
-                                            <input type="email" name="contacts[{{ $index + 1 }}][email]" class="form-control" value="{{ $contact->email }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endif
+                    <input type="hidden" name="contacts[0][id]" value="{{ $project->contacts->first()?->id ?? '' }}">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Position *</label>
+                            <input type="text" name="contacts[0][position]" class="form-control" required value="{{ $project->contacts->first()?->position ?? '' }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="contacts[0][phone_number]" class="form-control" value="{{ $project->contacts->first()?->phone_number ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="contacts[0][email]" class="form-control" value="{{ $project->contacts->first()?->email ?? '' }}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,7 +110,7 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="contact_value">Contact Value</label>
+                    <label for="contact_value">Contract Value</label>
                     <input type="text" name="contact_value" class="form-control @error('contact_value') is-invalid @enderror" value="{{ old('contact_value', $project->contact_value) }}" required min="1">
                     @error('contact_value')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -242,7 +201,6 @@
         </div>
 
         <div class="row mt-3">
-            <!-- Initial Files Upload -->
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="initial_files">Upload New Initial Files</label>
@@ -253,24 +211,31 @@
                     @error('initial_files')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <ul id="initialFileList" class="file-list"></ul>
-                </div>
+                    <ul id="initialFileList" class="file-list mt-2"></ul> </div>
 
+                {{-- Existing Initial Files Section --}}
                 @if($project->initialFiles->count())
                     <h6 class="fw-bold mb-3">Existing Initial Files:</h6>
-                    <div class="file-list">
+                    <div class="file-list existing-files"> {{-- Added 'existing-files' class for distinct styling if needed --}}
                         @foreach($project->initialFiles as $file)
                             <div class="file-item d-flex justify-content-between align-items-center p-2 border-bottom">
-                                <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                               
-                                <div class="delete-option">
-                                    <input type="checkbox" name="delete_initial_files[]" value="{{ $file->id }}" class="form-check-input">
-                                    <label class="form-check-label ms-2">Delete</label>
+                                {{-- File Name or View Link --}}
+                                <div class="d-flex align-items-center">
+                                    <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="btn btn-sm btn-outline-success me-2">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <span>{{ basename($file->file_path) }}</span> {{-- Display file name --}}
                                 </div>
-                                <div class="delete-option">
-                                    <label class="form-check-label ms-2">{{ $file->created_at->format('Y-m-d H:i') }}</label>
+
+                                {{-- Delete Option --}}
+                                <div class="delete-option form-check">
+                                    <input type="checkbox" name="delete_initial_files[]" value="{{ $file->id }}" class="form-check-input" id="deleteInitialFile{{ $file->id }}">
+                                    <label class="form-check-label" for="deleteInitialFile{{ $file->id }}">Delete</label>
+                                </div>
+
+                                {{-- Upload Date/Time --}}
+                                <div class="file-timestamp">
+                                    <label class="form-check-label">{{ $file->created_at->format('Y-m-d H:i') }}</label>
                                 </div>
                             </div>
                         @endforeach
@@ -279,6 +244,111 @@
             </div>
         </div>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dropArea = document.getElementById('initialDropArea');
+                const fileInput = dropArea.querySelector('.file-input');
+                const fileList = document.getElementById('initialFileList'); // This is for NEWLY selected files
+                const fileMessage = dropArea.querySelector('.file-message');
+
+                // Function to handle file selection and update the NEW file list
+                function handleFiles(files) {
+                    fileList.innerHTML = ''; // Clear previous list of NEW files
+                    if (files.length > 0) {
+                        fileMessage.textContent = `${files.length} file(s) selected`; // Update message to show count
+                        for (const file of files) {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = file.name;
+                            // You might want to add a way to remove newly added files before submission
+                            // For example: <li data-file-name="${file.name}">... <button class="remove-new-file">X</button></li>
+                            fileList.appendChild(listItem);
+                        }
+                    } else {
+                        fileMessage.textContent = 'Drag & Drop files here or click to browse'; // Reset message if no files
+                    }
+                }
+
+                // Handle file input change (when clicking to browse)
+                fileInput.addEventListener('change', function() {
+                    handleFiles(this.files);
+                });
+
+                // Handle drag-and-drop events
+                dropArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.add('highlight');
+                });
+
+                dropArea.addEventListener('dragleave', () => {
+                    dropArea.classList.remove('highlight');
+                });
+
+                dropArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.remove('highlight');
+                    const files = e.dataTransfer.files;
+                    fileInput.files = files; // Assign dropped files to the input
+                    handleFiles(files);
+                });
+
+                // Optional: Add styling for drag-and-drop highlight
+                // This is important to include if you haven't already globally defined these styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    .file-drop-area {
+                        border: 2px dashed #ccc;
+                        border-radius: 5px;
+                        padding: 30px;
+                        text-align: center;
+                        cursor: pointer;
+                        transition: border .2s ease-in-out;
+                    }
+                    .file-drop-area.highlight {
+                        border-color: #007bff;
+                        background-color: #e9f5ff;
+                    }
+                    /* Styling for newly selected files list */
+                    .file-list {
+                        list-style: none;
+                        padding: 0;
+                    }
+                    .file-list li {
+                        background-color: #f8f9fa;
+                        border: 1px solid #e2e6ea;
+                        padding: 8px 12px;
+                        margin-bottom: 5px;
+                        border-radius: 4px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                    /* Styling for existing files (can be customized further) */
+                    .file-item {
+                        background-color: #ffffff; /* Lighter background for existing files */
+                        border: 1px solid #dee2e6; /* A bit more defined border */
+                        margin-bottom: 8px;
+                        border-radius: 5px;
+                    }
+                    .file-item a {
+                        white-space: nowrap; /* Prevent button text from wrapping */
+                    }
+                    .file-item span {
+                        word-break: break-all; /* Break long file names */
+                        flex-grow: 1; /* Allow file name to take available space */
+                        margin-right: 10px; /* Spacing before delete option */
+                    }
+                    .delete-option {
+                        margin-left: auto; /* Push delete to the right */
+                    }
+                    .file-timestamp {
+                        font-size: 0.85em;
+                        color: #6c757d;
+                        margin-left: 15px; /* Spacing from delete */
+                    }
+                `;
+                document.head.appendChild(style);
+            });
+        </script>
 
         @error('client_id')
             <div class="alert alert-danger">{{ $message }}</div>

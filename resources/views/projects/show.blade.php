@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <p><strong>Date:</strong><br> {{ \Carbon\Carbon::parse($project->date)->format('M d, Y') }}</p>
-                                    <p><strong>Contact Value:</strong><br> {{ $project->contact_value }}</p>
+                                    <p><strong>Contract Value:</strong><br> {{ $project->contact_value }}</p>
                                     <p><strong>Execution Period:</strong><br> {{ $project->execution_period }} days</p>
                                 </div>
                                
