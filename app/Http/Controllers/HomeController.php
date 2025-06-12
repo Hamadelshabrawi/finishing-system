@@ -91,6 +91,7 @@ class HomeController extends Controller
             'active_projects' => \App\Models\Project::where('technical_approval', 'pending')->count(),
             'completed_projects' => \App\Models\Project::where('technical_approval', 'approved')->count(),
             'technical_pending' => \App\Models\Project::where('technical_approval', 'pending')->count(),
+            'pending_approval' => \App\Models\Project::where('technical_approval', 'pending')->count(),
         ];
 
         // Recent Projects
@@ -128,8 +129,10 @@ class HomeController extends Controller
 
         // Project Status Distribution
         $projectStatus = [
+            'pending' => \App\Models\Project::where('technical_approval', 'pending')->count(),
             'need_modify' => \App\Models\Project::where('technical_approval', 'need_modify')->count(),
-            'dismissed' => \App\Models\Project::where('technical_approval', 'dismissed')->count()
+            'dismissed' => \App\Models\Project::where('technical_approval', 'dismissed')->count(),
+            'approved' => \App\Models\Project::where('technical_approval', 'approved')->count()
         ];
 
         return view('home', compact('stats', 'recentProjects', 'recentActivities', 'projectStats', 'projectTimeline', 'projectStatus', 'categoryStats'));

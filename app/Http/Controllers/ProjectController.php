@@ -332,8 +332,9 @@ class ProjectController extends Controller
 
 public function show(Project $project)
 {
-    $items = item::all();
-    return view('projects.show', compact('project','items'));
+    $project = Project::with(['contacts'])->findOrFail($project->id);
+    $items = Item::all();
+    return view('projects.show', compact('project', 'items'));
 }
 
 public function edit($id)

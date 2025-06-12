@@ -58,6 +58,7 @@ $(function () {
         serverSide: true,
         ajax: '{{ route('items.index') }}',
         columns: columns,
+        order: [[0, 'desc']],
         dom: 'Bfrtip',
         buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
     });

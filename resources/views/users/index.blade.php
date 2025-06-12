@@ -26,7 +26,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ ucfirst($user->type) }}</td>
+                    <td>{{ ucfirst($user->user_type) }}</td>
                     <td>
                         @can('Edit User')
                             <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Edit</a>

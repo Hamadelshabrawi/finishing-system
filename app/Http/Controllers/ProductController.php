@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['project', 'items', 'outsources', 'finalFinishes'])
+        $products = Product::with(['project', 'items', 'outsources', 'finalFinish'])
             ->paginate(10);
 
         return view('products.index', compact('products'));

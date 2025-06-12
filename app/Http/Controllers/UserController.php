@@ -18,7 +18,7 @@ class UserController extends Controller
     
 
     public function index() {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         return view('users.index', compact('users'));
     }
 
@@ -39,7 +39,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'type' => $request->role
+            'user_type' => $request->role
         ]);
 
         

@@ -105,8 +105,8 @@
                                     <br>
                                     <br>
                                     <p><strong>Contact :</strong><br>
-
-                                    @if($project->contacts->count() > 0)
+                    
+                                    @if(isset($project->contacts))
                                         <div class="table-responsive">
                                             <table class="table table-hover">
                                                 <thead>
@@ -233,7 +233,7 @@
                                     <td>{{ $product->items->count() }}</td>
                                     <td>{{ $product->outsources->count() }}</td>
                                     <td>{{ isset($product->ProductNote) ? '1' : '0' }}</td>
-                                    <td>{{ $product->finalFinishes->count() }}</td>
+                                    <td>{{ isset($product->finalFinishes) ? $product->finalFinishes->count() : '0' }}</td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Product actions">
                                             <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-info" title="View">

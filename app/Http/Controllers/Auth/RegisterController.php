@@ -102,7 +102,7 @@ class RegisterController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'type' => 'User',
+            'user_type' => 'User',
         ]);
         
         $user->assignRole('User');
