@@ -129,8 +129,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('items', ItemController::class);
     Route::get('/items/data', [ItemController::class, 'data'])->name('items.data');
     Route::get('items/{item}/purchases/create', [ItemPurchaseController::class, 'create'])->name('item_purchases.create');
+    Route::get('items/{item}/purchases/{purchase}/edit', [ItemPurchaseController::class, 'edit'])->name('item_purchases.edit');
     Route::post('items/{item}/purchases', [ItemPurchaseController::class, 'store'])->name('item_purchases.store');
-    Route::post('items/{item}/purchases', [ItemPurchaseController::class, 'store'])->name('item_purchases.store');
+    Route::put('items/{item}/purchases/{purchase}', [ItemPurchaseController::class, 'update'])->name('item_purchases.update');
+    Route::delete('items/{item}/purchases/{purchase}', [ItemPurchaseController::class, 'destroy'])->name('item_purchases.destroy');
     Route::post('items/{item}/consume', [ItemPurchaseController::class, 'consume'])->name('item_purchases.consume');
 
     // product items routes
@@ -163,20 +165,26 @@ Route::middleware(['auth'])->group(function () {
         Route::get('outsources/{outsource}/edit', [OutsourceController::class, 'edit'])->name('product.outsources.edit');
     });
 
+    Route::get('purchases/create', [ItemPurchaseController::class, 'create'])->name('item.purchases.create');
+    Route::post('purchases', [ItemPurchaseController::class, 'store'])->name('item.purchases.store');
+    Route::get('purchases/{purchase}/edit', [ItemPurchaseController::class, 'edit'])->name('item.purchases.edit');
+    Route::put('purchases/{purchase}', [ItemPurchaseController::class, 'update'])->name('item.purchases.update');
+    Route::delete('purchases/{purchase}', [ItemPurchaseController::class, 'destroy'])->name('item.purchases.destroy');
+    Route::post('purchases/consume', [ItemPurchaseController::class, 'consume'])->name('item.purchases.consume');
+
+
     // products routes
     Route::resource('products', ProductController::class);
-
-    // Email Configuration
-        Route::get('/config', [EmailController::class, 'config'])->name('email.config');
-        Route::post('/config', [EmailController::class, 'updateConfig'])->name('email.config.update');
-        
-        Route::get('/send', [EmailController::class, 'sendForm'])->name('email.send');
-        Route::post('/send', [EmailController::class, 'sendEmail'])->name('email.send.submit');
-        Route::get('/email', [EmailController::class, 'create'])->name('email.form');
-        Route::post('/email/send', [EmailController::class, 'send'])->name('email.send');
-        Route::post('/email/project', [ProjectController::class, 'sendProjectEmail'])->name('email.ProjectSend');
-        Route::get('/logs', [EmailController::class, 'logs'])->name('email.logs');
-});
+    Route::get('/config', [EmailController::class, 'config'])->name('email.config');
+    Route::post('/config', [EmailController::class, 'updateConfig'])->name('email.config.update');
+    
+    Route::get('/send', [EmailController::class, 'sendForm'])->name('email.send');
+    Route::post('/send', [EmailController::class, 'sendEmail'])->name('email.send.submit');
+    Route::get('/email', [EmailController::class, 'create'])->name('email.form');
+    Route::post('/email/send', [EmailController::class, 'send'])->name('email.send');
+    Route::post('/email/project', [ProjectController::class, 'sendProjectEmail'])->name('email.ProjectSend');
+    Route::get('/logs', [EmailController::class, 'logs'])->name('email.logs');
+    });
 
 
 Route::prefix('admin')->middleware('auth')->group(function () {

@@ -16,15 +16,22 @@
         <tr>
             <th>Purchase Price</th>
             <th>Quantity</th>
-            <th>Remaining</th>
             <th>Purchase Date</th>
         </tr>
         @foreach($item->purchases as $purchase)
         <tr>
             <td>${{ $purchase->purchase_price }}</td>
             <td>{{ $purchase->quantity }}</td>
-            <td>{{ $purchase->remaining_quantity }}</td>
             <td>{{ $purchase->purchase_date }}</td>
+            <td>
+
+            <a href="{{ route('item_purchases.edit', [$item, $purchase]) }}" class="btn btn-sm btn-primary">Edit</a>
+                <form action="{{ route('item_purchases.destroy', [$item, $purchase]) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this purchase?')">Delete</button>
+                </form>
+            </td>
         </tr>
         @endforeach
     </table>

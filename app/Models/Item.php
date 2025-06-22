@@ -9,7 +9,22 @@ class Item extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'unit', 'price', 'description'];
+    protected $fillable = [
+        'name',
+        'unit',
+        'price',
+        'description',
+        'total_stock',
+        'current_cost',
+        'total_cost',
+        'total_quantity'
+    ];
+
+    protected $casts = [
+        'total_cost' => 'decimal:2',
+        'current_cost' => 'decimal:2',
+        'price' => 'decimal:2'
+    ];
 
     public function purchases()
     {
@@ -19,5 +34,10 @@ class Item extends Model
     public function materials()
     {
         return $this->hasMany(Material::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }
