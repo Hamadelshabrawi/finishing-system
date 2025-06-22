@@ -6,6 +6,7 @@
 
 <link rel="icon" href="{{ langAsset('favicon.ico') }}">
 <title>@yield('title') | {{ config('app.name') }}</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <!-- Simple bar CSS -->
 <link rel="stylesheet" href="{{ langAsset('css/simplebar.css') }}">

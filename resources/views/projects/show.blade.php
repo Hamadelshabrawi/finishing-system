@@ -5,8 +5,6 @@
 @section('content')
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    {{-- Custom font and background color assumed to be handled in layouts.app --}}
-    {{-- Bootstrap CSS is also assumed to be included in layouts.app --}}
 
     <div class="mt-4"> {{-- Removed .container as per instructions --}}
         {{-- Page Header and Action Buttons --}}
@@ -200,6 +198,64 @@
                         @endcan
                     </div>
                 </div>
+            </div>
+        </div>
+
+
+        {{-- Tasks Section --}}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Tasks</h5>
+                <a href="{{ route('tasks.create', $project->id) }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus me-2"></i> Add Task
+                </a>
+            </div>
+            <div class="card-body">
+                @if($project->tasks->isEmpty())
+                    <p class="text-muted">No tasks created yet.</p>
+                @else
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Assigned To</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($project->tasks as $task)
+                                    <tr>
+                                        <td>{{ $task->name }}</td>
+                                        <td>{{ $task->description }}</td>
+                                        <td>{{ $task->assignedTo->name }}</td>
+                                        <td>
+                                            <span style="color:white" class="badge {{ $task->status === 'completed' ? 'bg-success' : ($task->status === 'in_progress' ? 'bg-warning' : 'bg-secondary') }}">
+                                                {{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $task->due_date ? $task->due_date->format('Y-m-d') : '-' }}</td>
+                                        <td>
+                                            <form action="{{ route('tasks.destroy', [$project->id, $task->id]) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a href="{{ route('tasks.edit', [$project->id, $task->id]) }}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
         </div>
 

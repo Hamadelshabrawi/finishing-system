@@ -14,14 +14,14 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/') }}">
-                    <i class="fe fe-users"></i>
+                <i class="fa-solid fa-gauge"></i>
                     <span class="ml-3 item-text">{{ __('Dashboard') }}</span>
                 </a>
             </li>
                 @can('Roles List')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('roles.index') }}">
-                        <i class="fe fe-lock"></i>
+                    <i class="fa-brands fa-critical-role"></i>
                         <span class="ml-3 item-text">{{ __('Manage Roles') }}</span>
                     </a>
                 </li>
@@ -29,7 +29,7 @@
                 @can('Permission List')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('permissions.index') }}">
-                        <i class="fe fe-lock"></i>
+                    <i class="fa-solid fa-universal-access"></i>
                         <span class="ml-3 item-text">{{ __('Manage Permissions') }}</span>
                     </a>
                 </li>
@@ -43,6 +43,13 @@
                     </a>
                 </li>
                 @endcan
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('my-tasks') }}">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span class="ml-3 item-text">{{ __('My Tasks') }}</span>
+                </a>
+            </li>
             @can('Projects List')
             <ul class="navbar-nav flex-fill w-100 mb-2">
                 <li class="nav-item dropdown">
@@ -69,7 +76,7 @@
             @can('Items List')
                 <li class="nav-item dropdown">
                     <a href="{{ route('items.index') }}" class="nav-link">
-                        <i class="fe fe-users fe-16"></i>
+                    <i class="fa-solid fa-sitemap"></i>
                         <span class="ml-3 item-text">{{ __('Items') }}</span>
                     </a>
                 </li>
@@ -77,7 +84,7 @@
             @can('Products List')
                 <li class="nav-item dropdown">
                     <a href="{{ route('products.index') }}" class="nav-link">
-                        <i class="fe fe-users fe-16"></i>
+                        <i class="fa-brands fa-product-hunt"></i>
                         <span class="ml-3 item-text">{{ __('Products') }}</span>
                     </a>
                 </li>
@@ -85,7 +92,7 @@
             @can('Clients List')
                 <li class="nav-item dropdown">
                     <a href="{{ route('clients.index') }}" class="nav-link">
-                        <i class="fe fe-users fe-16"></i>
+                    <i class="fa-solid fa-people-arrows"></i>
                         <span class="ml-3 item-text">{{ __('Clients') }}</span>
                     </a>
                 </li>
@@ -93,7 +100,7 @@
             @can('Send Email')
                 <li class="nav-item dropdown">
                     <a href="{{ route('email.form') }}" class="nav-link">
-                        <i class="fe fe-users fe-16"></i>
+                        <i class="fa-regular fa-envelope"></i>
                         <span class="ml-3 item-text">{{ __('Send Email') }}</span>
                     </a>
                 </li>

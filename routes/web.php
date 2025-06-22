@@ -20,6 +20,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductItemController;
 use App\Http\Controllers\ProductNoteController;
 use App\Http\Controllers\ProductFileController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,17 @@ use App\Http\Controllers\ProductFileController;
 Route::middleware(['auth'])->group(function() {
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/timeline-data', [HomeController::class, 'getTimelineData']);
+    Route::get('/my-tasks', [TaskController::class, 'myTasks'])->name('my-tasks');
+
+    // Task Routes
+    Route::prefix('projects/{project}')->group(function () {
+        Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+        Route::get('tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+        Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
+        Route::get('tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+        Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+        Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    });
     });
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {

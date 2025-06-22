@@ -30,6 +30,14 @@ class Project extends Model
         'technical_approval',
         'created_by'
     ];
+
+    /**
+     * Get all tasks for this project
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
     
     protected $dates = ['date', 'delivery_date'];
 
