@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 
+
 class ProductItemController extends Controller
 {
     public function __construct()
@@ -34,25 +35,22 @@ class ProductItemController extends Controller
 
         $item = Item::findOrFail($validated['item_id']);
         
-        // Check if the product item already exists
+        // Create or update product item
         $productItem = ProductItem::firstOrCreate([
             'product_id' => $productId,
             'item_id' => $validated['item_id']
         ], [
             'quantity' => $validated['quantity'],
-            'unit_price' => $item->price,
-            'total_price' => $item->price * $validated['quantity'],
+            'unit_cost' => $item->price,
+            'cost' => $item->price * $validated['quantity'],
         ]);
 
-        // If the item already existed, update its quantity and prices
+        // If the item already existed, update its quantity and cost
         if (!$productItem->wasRecentlyCreated) {
-            ProductItem::where('product_id', $productId)
-                ->where('item_id', $validated['item_id'])
-                ->update([
-                    'quantity' => $validated['quantity'],
-                    'unit_price' => $item->price,
-                    'total_price' => $item->price * $validated['quantity']
-                ]);
+            $productItem->quantity = $validated['quantity'];
+            $productItem->unit_cost = $item->price;
+            $productItem->cost = $item->price * $validated['quantity'];
+            $productItem->save();
         }
 
         return redirect()->back()->with('success', 'Item added successfully');
@@ -64,23 +62,20 @@ class ProductItemController extends Controller
     public function update(Request $request, $product, $item) 
     {
         $validated = Validator::make($request->all(), [
-            'quantity' => 'required|numeric|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'total_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'unit_cost' => 'required|numeric|min:0',
+            'cost' => 'required|numeric|min:0',
         ])->validate();
-
 
         $productItem = ProductItem::where('product_id', $product)
             ->where('item_id', $item)
             ->firstOrFail();
 
-        ProductItem::where('product_id', $product)
-            ->where('item_id', $item)
-            ->update([
-                'quantity' => $validated['quantity'],
-                'unit_price' => $validated['unit_price'],
-                'total_price' => $validated['total_price']
-            ]);
+        $productItem->update([
+            'quantity' => $validated['quantity'],
+            'unit_cost' => $validated['unit_cost'],
+            'cost' => $validated['cost']
+        ]);
 
         return redirect()->back()->with('success', 'Item updated successfully');
     }

@@ -175,6 +175,10 @@ Route::middleware(['auth'])->group(function () {
 
     // products routes
     Route::resource('products', ProductController::class);
+    Route::prefix('products/{product}')->group(function () {
+        Route::get('items/consume', [ProductItemConsumptionController::class, 'create'])->name('products.items.consume.create');
+        Route::post('items/consume', [ProductItemConsumptionController::class, 'store'])->name('products.items.consume.store');
+    });
     Route::get('/config', [EmailController::class, 'config'])->name('email.config');
     Route::post('/config', [EmailController::class, 'updateConfig'])->name('email.config.update');
     

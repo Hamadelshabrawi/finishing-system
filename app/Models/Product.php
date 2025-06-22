@@ -64,6 +64,11 @@ class Product extends Model
         return $this->hasOne(FinalFinish::class);
     }
 
+    public function consumptions()
+    {
+        return $this->hasMany(ProductItemConsumption::class);
+    }
+
     public function files()
     {
         return $this->hasMany(ProductFile::class);

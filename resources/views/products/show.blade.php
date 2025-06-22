@@ -27,6 +27,7 @@
                                 <div class="card-header">Actions</div>
                                 <div class="card-body">
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+                                    <a href="{{ route('products.items.consume.create', $product) }}" class="btn btn-info">Consume Items</a>
                                     <a href="{{ route('projects.show', $product->project->id) }}" class="btn btn-secondary">Back</a>
                                 </div>
                             </div>

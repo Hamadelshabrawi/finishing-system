@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemPurchase;
 use DataTables;
 use Illuminate\Support\Facades\Log;
+use App\Models\Product;
 
 class ItemController extends Controller
 {
