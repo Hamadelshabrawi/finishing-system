@@ -27,10 +27,10 @@ class FinalFinishController extends Controller
     public function store(Request $request, Product $product)
     {
         $request->validate([
-            'internal_paint' => 'nullable|string',
-            'electrostatic' => 'nullable|string',
-            'pvd' => 'nullable|string',
-            'polishing' => 'nullable|string',
+            'internal_paint' => 'nullable|string',  // دهانات داخلية
+            'electrostatic' => 'nullable|string',   // الكتروستاتيك
+            'pvd' => 'nullable|string',            // PVD
+            'polishing' => 'nullable|string',      // فرش تلميع
         ]);
 
         // Check if FinalFinish already exists for this product
@@ -54,27 +54,35 @@ class FinalFinishController extends Controller
 
     public function edit(Product $product)
     {
-        $finalFinish = $product->finalFinish;
+        // Get the final finish directly from the database
+        $finalFinish = FinalFinish::where('product_id', $product->id)->first();
+        
+        if (!$finalFinish) {
+            return redirect()->route('products.show', $product->id)
+                ->with('error', 'No final finishes found for this product');
+        }
+
         return view('products.final-finish.edit', compact('product', 'finalFinish'));
     }
 
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'internal_paint' => 'nullable|string',
-            'electrostatic' => 'nullable|string',
-            'pvd' => 'nullable|string',
-            'polishing' => 'nullable|string',
+            'internal_paint' => 'nullable|string',  // دهانات داخلية
+            'electrostatic' => 'nullable|string',   // الكتروستاتيك
+            'pvd' => 'nullable|string',            // PVD
+            'polishing' => 'nullable|string',      // فرش تلميع
         ]);
 
-        // Check if final finish exists for this product
-        $finalFinish = $product->finalFinish;
+        // Get the final finish directly from the database
+        $finalFinish = FinalFinish::where('product_id', $product->id)->first();
         
         if (!$finalFinish) {
             return redirect('/products/' . $product->id)
                 ->with('error', 'No final finishes found for this product');
         }
 
+        // Update using mass assignment like in store method
         $finalFinish->update($request->all());
 
         return redirect('/products/' . $product->id)

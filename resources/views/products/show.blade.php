@@ -1,6 +1,9 @@
 @extends('layouts.app')
+
 @section('title', 'Product Details')
+
 @section('content')
+    @can('View Product Details')
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
@@ -16,7 +19,7 @@
                                 <div class="card-header">Product Details</div>
                                 <div class="card-body">
                                     <p><strong>Project:</strong> {{ $product->project->project_name ?? 'N/A' }}</p>
-                                    <p><strong>Product:</strong> {{  $product->name  }}</p>
+                                    <p><strong>Product:</strong> {{ $product->name }}</p>
                                     <p><strong>Description:</strong> {{ $product->description }}</p>
                                 </div>
                             </div>
@@ -28,6 +31,13 @@
                                 <div class="card-body">
                                     @can('Edit Product')
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+                                    @endcan
+                                    @can('Delete Product')
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                     @endcan
                                     @can('Consume Item')
                                     <a href="{{ route('products.items.consume.create', $product) }}" class="btn btn-info">Consume Items</a>
@@ -52,25 +62,38 @@
                                 </div>
                                 <div class="card-body">
                                     @if($product->items->isEmpty())
-                                        <p>No items associated with this product.</p>
+                                        <p class="text-muted">No items added yet.</p>
                                     @else
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Item</th>
+                                                    <th>Name</th>
                                                     <th>Quantity</th>
-                                                    <th>Unit Price</th>
-                                                    <th>Total Price</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($product->items as $item)
-                                                    <tr>
-                                                        <td>{{ $item->item->name }}</td>
-                                                        <td>{{ $item->quantity }}</td>
-                                                        <td>{{ $item->unit_price }}</td>
-                                                        <td>{{ $item->total_price }}</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>{{ $item->name }}</td>
+                                                    <td>{{ $item->pivot->quantity }}</td>
+                                                    <td>
+                                                        @can('Edit Item')
+                                                        <a href="{{ route('product.items.edit', ['product' => $product->id, 'item' => $item->id]) }}" class="btn btn-sm btn-warning">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        @endcan
+                                                        @can('Delete Item')
+                                                        <form action="{{ route('product.items.destroy', ['product' => $product->id, 'item' => $item->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                        @endcan
+                                                    </td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -108,12 +131,12 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($product->outsources as $outsource)
-                                                    <tr>
-                                                        <td>{{ $outsource->outsource_name }}</td>
-                                                        <td>{{ $outsource->cost }}</td>
-                                                        <td>{{ $outsource->quantity }}</td>
-                                                        <td>{{ $outsource->boarder_note }}</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>{{ $outsource->outsource_name }}</td>
+                                                    <td>{{ $outsource->cost }}</td>
+                                                    <td>{{ $outsource->quantity }}</td>
+                                                    <td>{{ $outsource->boarder_note }}</td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -125,6 +148,7 @@
                     @endcan
 
                     @can('View Product Details')
+                    @can('View Product Files')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
@@ -164,7 +188,7 @@
                                                                 <form action="{{ route('products.files.destroy', ['product' => $product->id, 'file' => $file->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this file?')">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this file?')">
+                                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
                                                                         <i class="fas fa-trash"></i> Delete
                                                                     </button>
                                                                 </form>
@@ -180,9 +204,10 @@
                             </div>
                         </div>
                     </div>
-                    @endcan
+                    @endcan @endcan
 
                     @can('View Product Details')
+                    @can('View Final Finish')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
@@ -209,24 +234,30 @@
                                     @if(!$product->finalFinish)
                                         <p class="text-muted">No final finishes added yet.</p>
                                     @else
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Final Finish</th>
-                                                    <th>Quantity</th>
-                                                    <th>Unit Price</th>
-                                                    <th>Total Price</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>{{ $product->finalFinish->final_finish }}</td>
-                                                    <td>{{ $product->finalFinish->quantity }}</td>
-                                                    <td>{{ $product->finalFinish->unit_price }}</td>
-                                                    <td>{{ $product->finalFinish->total_price }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">Internal Paint (دهانات داخلية)</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->internal_paint }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
+                                                        <h6 class="mb-0">Electrostatic (الكتروستاتيك)</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>{{ $product->finalFinish->electrostatic }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">
                                                         <h6 class="mb-0">PVD</h6>
                                                     </div>
                                                     <div class="card-body">
@@ -234,7 +265,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6">
                                                 <div class="card mb-3">
                                                     <div class="card-header">
@@ -252,7 +282,10 @@
                         </div>
                     </div>
                     @endcan
+                    @endcan
+
                     @can('View Product Details')
+                    @can('View Product Notes')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
@@ -261,21 +294,21 @@
                                         <h5 class="mb-0">Product Notes</h5>
                                         <div class="btn-group">
                                             @if(!isset($product->ProductNote?->note))
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNoteModal">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
                                                 <i class="fas fa-plus me-2"></i>Add Note
                                             </button>
                                             @else
-                                            <button type="button" class="btn btn-sm btn-warning edit-note-btn" 
-                                                
+                                            <button type="button" class="btn btn-sm btn-warning edit-note-btn"
                                                 data-note="{{ $product->ProductNote?->note ?? '' }}"
-                                                data-toggle="modal"
-                                                data-target="#editNoteModal">
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editNoteModal"
+                                                data-note-id="{{ $product->ProductNote->id }}"> {{-- Added data-note-id --}}
                                                 <i class="fas fa-edit me-2"></i>Edit Note
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-danger delete-note-btn" 
-                                                
-                                                data-toggle="modal"
-                                                data-target="#deleteNoteModal">
+                                            <button type="button" class="btn btn-sm btn-danger delete-note-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteNoteModal"
+                                                data-note-id="{{ $product->ProductNote->id }}"> {{-- Added data-note-id --}}
                                                 <i class="fas fa-trash me-2"></i>Delete Note
                                             </button>
                                             @endif
@@ -293,12 +326,13 @@
                         </div>
                     </div>
                     @endcan
+                    @endcan
                 </div>
             </div>
         </div>
     </div>
+    @endcan
 
-<!-- Upload Files Modal -->
 <div class="modal fade" id="uploadFilesModal" tabindex="-1" aria-labelledby="uploadFilesModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -336,7 +370,6 @@
     </div>
 </div>
 
-<!-- Add Note Modal -->
 <div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -361,7 +394,6 @@
     </div>
 </div>
 
-<!-- Edit Note Modal -->
 <div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -369,7 +401,9 @@
                 <h5 class="modal-title" id="editNoteModalLabel">Edit Note</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editNoteForm">
+            <form id="editNoteForm" method="POST"> {{-- Removed action and added method="POST" --}}
+                @csrf
+                @method('PUT') {{-- Added PUT method for updates --}}
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="edit_note" class="form-label">Note</label>
@@ -385,162 +419,47 @@
     </div>
 </div>
 
-<script>
-    // Handle edit note button click
-    $(document).on('click', '.edit-note-btn', function() {
-        const note = $(this).data('note');
-        $('#edit_note').val(note);
-        $('#editNoteModal').modal('show');
-    });
-
-    // Handle edit note form submission
-    $('#editNoteForm').on('submit', function(e) {
-        e.preventDefault();
-        const noteId = $(this).data('note-id');
-        const note = $('#edit_note').val();
-
-        $.ajax({
-            url: `/products/${noteId}/notes/${noteId}`,
-            type: 'PUT',
-            data: {
-                _token: '{{ csrf_token() }}',
-                note: note
-            },
-            success: function(response) {
-                $('#editNoteModal').modal('hide');
-                location.reload();
-            },
-            error: function(xhr) {
-                alert('Error updating note');
-            }
-        });
-    });
-</script>
-
-<!-- Add this before the closing body tag -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-@endsection
-
-<!-- Add Note Modal -->
-<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addNoteModalLabel">Add Product Note</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="addNoteForm" action="{{ route('product.note.store', $product) }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="note" class="form-label">Note</label>
-                        <textarea class="form-control" id="note" name="note" rows="4" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Note Modal -->
-<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editNoteModalLabel">Edit Product Note</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="editNoteForm" action="{{ route('product.note.update', $product) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_note" class="form-label">Note</label>
-                        <textarea class="form-control" id="edit_note" name="note" rows="4" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Note Confirmation Modal -->
 <div class="modal fade" id="deleteNoteModal" tabindex="-1" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteNoteModalLabel">Delete Note</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this note?</p>
-                <form id="deleteNoteForm" action="{{ route('product.note.destroy', $product) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteNoteBtn">Delete</button>
-            </div>
+            <form id="deleteNoteForm" method="POST"> {{-- Removed action and added method="POST" --}}
+                @csrf
+                @method('DELETE') {{-- Added DELETE method for deletion --}}
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this note?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-@push('scripts')
+@endsection
+
+@push('scripts') {{-- Use @push('scripts') to add scripts to your layout's @stack('scripts') --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Handle edit note button click
     $(document).on('click', '.edit-note-btn', function() {
         const note = $(this).data('note');
+        const noteId = $(this).data('note-id');
         $('#edit_note').val(note);
+        $('#editNoteForm').attr('action', `/products/{{ $product->id }}/notes/${noteId}`); // Set action dynamically
         $('#editNoteModal').modal('show');
     });
 
     // Handle delete note button click
     $(document).on('click', '.delete-note-btn', function() {
+        const noteId = $(this).data('note-id');
+        $('#deleteNoteForm').attr('action', `/products/{{ $product->id }}/notes/${noteId}`); // Set action dynamically
         $('#deleteNoteModal').modal('show');
-    });
-
-    // Handle delete confirmation
-    $('#confirmDeleteNoteBtn').on('click', function() {
-        $('#deleteNoteForm').submit();
-    });
-
-    // Show edit and delete buttons only if note exists
-    $(document).ready(function() {
-        const noteExists = {{ $product->note?->note ? 'true' : 'false' }};
-        if (noteExists) {
-            $('.edit-note-btn').show();
-            $('.delete-note-btn').show();
-        }
-    });
-
-    // Handle delete note button click
-    $(document).on('click', '.delete-note-btn', function() {
-        $('#deleteNoteModal').modal('show');
-    });
-
-    // Handle delete confirmation
-    $('#confirmDeleteNoteBtn').on('click', function() {
-        $('#deleteNoteForm').submit();
-    });
-
-    // Show edit button only if note exists
-    $(document).ready(function() {
-        const noteExists = {{ $product->note?->note ? 'true' : 'false' }};
-        if (noteExists) {
-            $('.edit-note-btn').show();
-            $('.delete-note-btn').show();
-        }
     });
 </script>
 @endpush

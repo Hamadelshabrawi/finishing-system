@@ -17,28 +17,28 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="internal_paint" class="form-label">Internal Paint (دهانات داخلية)</label>
-                                    <textarea class="form-control" id="internal_paint" name="internal_paint" rows="4">{{ $product->finalFinish->internal_paint }}</textarea>
+                                    <textarea class="form-control" id="internal_paint" name="internal_paint" rows="4">{{ $finalFinish->internal_paint }}</textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="electrostatic" class="form-label">Electrostatic (الكتروستاتيك)</label>
-                                    <textarea class="form-control" id="electrostatic" name="electrostatic" rows="4">{{ $product->finalFinish->electrostatic }}</textarea>
+                                    <textarea class="form-control" id="electrostatic" name="electrostatic" rows="4">{{ $finalFinish->electrostatic }}</textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="pvd" class="form-label">PVD</label>
-                                    <textarea class="form-control" id="pvd" name="pvd" rows="4">{{ $product->finalFinish->pvd }}</textarea>
+                                    <textarea class="form-control" id="pvd" name="pvd" rows="4">{{ $finalFinish->pvd }}</textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="polishing" class="form-label">Polishing (فرش تلميع)</label>
-                                    <textarea class="form-control" id="polishing" name="polishing" rows="4">{{ $product->finalFinish->polishing }}</textarea>
+                                    <textarea class="form-control" id="polishing" name="polishing" rows="4">{{ $finalFinish->polishing }}</textarea>
                                 </div>
                             </div>
                         </div>

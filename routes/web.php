@@ -113,7 +113,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('final-finish/edit', [FinalFinishController::class, 'update'])->name('products.final-finish.update');
                 Route::delete('final-finish', [FinalFinishController::class, 'destroy'])->name('products.final-finish.destroy');
             });
-            Route::put('final-finish/edit', [FinalFinishController::class, 'update'])->name('products.final-finish.update');
             Route::delete('final-finish', [FinalFinishController::class, 'destroy'])->name('products.final-finish.destroy');
 
         // Admin routes (using Spatie permissions)
