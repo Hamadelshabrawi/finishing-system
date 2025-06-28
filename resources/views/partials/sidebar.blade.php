@@ -47,7 +47,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('my-tasks') }}">
                     <i class="fa-solid fa-list-check"></i>
-                    <span class="ml-3 item-text">{{ __('My Tasks') }}</span>
+                    <span class="ml-3 item-text">@if(Auth::user()->user_type == 'Admin') {{ __('All Tasks') }} @else {{ __('My Tasks') }} @endif</span>
                 </a>
             </li>
             @can('Projects List')

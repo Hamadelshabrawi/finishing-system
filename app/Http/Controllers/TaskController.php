@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -19,11 +20,10 @@ class TaskController extends Controller
 
     public function myTasks()
     {
-        $tasks = Task::with('project')
-            ->where('assigned_to', auth()->id())
-            ->orderBy('due_date', 'asc')
-            ->get();
-
+        $tasks = Task::with('project')->where('assigned_to', auth()->id())->orderBy('due_date', 'asc')->get();
+        if (Auth::user()->user_type == 'Admin') {
+            $tasks = Task::with('project')->orderBy('due_date', 'asc')->get();
+        }
         return view('tasks.my-tasks', compact('tasks'));
     }
 
