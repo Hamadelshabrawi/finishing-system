@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Seed roles and permissions
-        $this->call(RolesAndPermissionsSeeder::class);
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            SupplierPermissionSeeder::class
+        ]);
         
         // Create admin user if it doesn't exist
         $adminUser = \App\Models\User::where('email', 'admin@admin.com')->first();

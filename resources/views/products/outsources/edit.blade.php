@@ -13,6 +13,27 @@
                         @method('PUT')
 
                         <div class="form-group row">
+                            <label for="supplier_id" class="col-md-4 col-form-label text-md-right">{{ __('Supplier') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-select" id="supplier_id" name="supplier_id" required>
+                                    <option value="">Select a supplier</option>
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" {{ $outsource->supplier_id == $supplier->id ? 'selected' : '' }}>
+                                            {{ $supplier->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('supplier_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="outsource_name" class="col-md-4 col-form-label text-md-right">{{ __('Outsource Name') }}</label>
 
                             <div class="col-md-6">

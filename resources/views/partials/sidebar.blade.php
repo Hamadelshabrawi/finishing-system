@@ -89,6 +89,15 @@
                     </a>
                 </li>
             @endcan
+
+            @can('Suppliers List')
+                <li class="nav-item dropdown">
+                    <a href="{{ route('suppliers.index') }}" class="nav-link">
+                        <i class="fa-solid fa-truck"></i>
+                        <span class="ml-3 item-text">{{ __('Suppliers') }}</span>
+                    </a>
+                </li>
+            @endcan
             @can('Clients List')
                 <li class="nav-item dropdown">
                     <a href="{{ route('clients.index') }}" class="nav-link">

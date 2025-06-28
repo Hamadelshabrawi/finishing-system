@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('boarder_note');
             $table->decimal('cost', 10, 2)->nullable();
             $table->decimal('quantity', 10, 2)->default(1);
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
             $table->timestamps();
         });
     }

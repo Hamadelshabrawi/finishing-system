@@ -22,6 +22,7 @@ use App\Http\Controllers\ProductNoteController;
 use App\Http\Controllers\ProductFileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProductItemConsumptionController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -151,8 +152,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('items/{item}/purchases/{purchase}', [ItemPurchaseController::class, 'destroy'])->name('item_purchases.destroy');
         Route::post('items/{item}/consume', [ItemPurchaseController::class, 'consume'])->name('item_purchases.consume');
 
+        // Supplier routes
+        Route::resource('suppliers', SupplierController::class);
+        Route::get('suppliers/{supplier}/outsources', [SupplierController::class, 'supplierOutsources'])->name('suppliers.outsources');
+
         // outsources routes
-        Route::get('outsources', [OutsourceController::class, 'index'])->name('product.outsources.index');
+        Route::get('outsources/{product}', [OutsourceController::class, 'index'])->name('product.outsources.index');
         Route::post('outsources', [OutsourceController::class, 'store'])->name('product.outsources.store');
         Route::post('outsources/{outsource}', [OutsourceController::class, 'update'])->name('product.outsources.update');
         Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('product.outsources.destroy');

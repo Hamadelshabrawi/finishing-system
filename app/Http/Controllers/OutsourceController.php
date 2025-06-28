@@ -21,7 +21,8 @@ class OutsourceController extends Controller
     public function create($productId)
     {
         $product = Product::findOrFail($productId);
-        return view('products.outsources.create', compact('product'));
+        $suppliers = Supplier::all();
+        return view('products.outsources.create', compact('product', 'suppliers'));
     }
 
     // Show the form for editing the specified resource
@@ -29,7 +30,8 @@ class OutsourceController extends Controller
     {
         $product = Product::findOrFail($productId);
         $outsource = Outsource::findOrFail($outsourceId);
-        return view('products.outsources.edit', compact('product', 'outsource'));
+        $suppliers = Supplier::all();
+        return view('products.outsources.edit', compact('product', 'outsource', 'suppliers'));
     }
 
     // Store a newly created resource in storage
@@ -40,11 +42,13 @@ class OutsourceController extends Controller
             'cost' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:1',
             'boarder_note' => 'nullable|string',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
         Outsource::create([
             'product_id' => $productId,
             'project_id' => $request->project_id,
+            'supplier_id' => $validated['supplier_id'],
             'outsource_name' => $validated['outsource_name'],
             'boarder_note' => $validated['boarder_note'] ?? null,
             'cost' => $validated['cost'],
@@ -62,6 +66,7 @@ class OutsourceController extends Controller
             'cost' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:1',
             'boarder_note' => 'nullable|string',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
         $outsource = Outsource::findOrFail($outsourceId);

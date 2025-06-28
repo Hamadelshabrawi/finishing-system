@@ -12,9 +12,18 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="outsource_name" class="col-md-4 col-form-label text-md-right">{{ __('Outsource Name') }}</label>
+                            <div class="mb-3">
+                                <label for="supplier_id" class="form-label">Supplier</label>
+                                <select class="form-select" id="supplier_id" name="supplier_id" required>
+                                    <option value="">Select a supplier</option>
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                            <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="outsource_name" class="form-label">Outsource Name</label>
                                 <input id="outsource_name" type="text" class="form-control @error('outsource_name') is-invalid @enderror" name="outsource_name" value="{{ old('outsource_name') }}" required autocomplete="outsource_name" autofocus>
 
                                 @error('outsource_name')
@@ -23,9 +32,9 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div class="form-group row">
+                            <div class="mb-3">
+                                <label for="cost" class="form-label">Cost</label>
                             <label for="cost" class="col-md-4 col-form-label text-md-right">{{ __('Cost') }}</label>
 
                             <div class="col-md-6">

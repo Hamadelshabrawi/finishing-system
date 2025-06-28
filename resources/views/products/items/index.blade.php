@@ -55,11 +55,10 @@
                         <tbody>
                             @foreach($product->items as $item)
                                 <tr>
-                                    
                                     <td>{{ $item->item->name }}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->unit_price }}</td>
-                                    <td>{{ $item->total_price }}</td>
+                                    <td>{{ $item->unit_cost }}</td>
+                                    <td>{{ $item->cost }}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-warning" 
                                         data-bs-toggle="modal"
