@@ -26,6 +26,7 @@ class ProjectController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth');
         $this->middleware('can:Projects List')->only(['index']);
         $this->middleware('can:Create Project')->only(['create', 'store']);
         $this->middleware('can:Edit Project')->only(['edit', 'update']);
@@ -65,7 +66,7 @@ class ProjectController extends Controller
                 ->addColumn('actions', function($project) {
                     $actions = '<div class="action-buttons">';
     
-                    if (auth()->user()->can('Project Details')) {
+                    if (auth()->user()->can('View Project Details')) {
                         $actions .= '<a href="'.route('projects.show', $project->id).'" 
                                     class="btn btn-info btn-sm" 
                                     title="View Details">

@@ -10,6 +10,16 @@ use App\Models\Product;
 
 class OutsourceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // Apply middleware for each action
+        $this->middleware('can:Products List')->only(['index']);
+        $this->middleware('can:Create Outsource')->only(['create', 'store']);
+        $this->middleware('can:Edit Outsource')->only(['edit', 'update']);
+        $this->middleware('can:Delete Outsource')->only(['destroy']);
+    }
+
     // Display a listing of the resource
     public function index($productId)
     {

@@ -201,14 +201,16 @@
             </div>
         </div>
 
-
+        @can('Tasks List')
         {{-- Tasks Section --}}
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Tasks</h5>
+                @can('Create Task')
                 <a href="{{ route('tasks.create', $project->id) }}" class="btn btn-sm btn-primary">
                     <i class="fas fa-plus me-2"></i> Add Task
                 </a>
+                @endcan
             </div>
             <div class="card-body">
                 @if($project->tasks->isEmpty())
@@ -239,6 +241,7 @@
                                         </td>
                                         <td>{{ $task->due_date ? $task->due_date->format('Y-m-d') : '-' }}</td>
                                         <td>
+                                            @can('Edit Task')
                                             <form action="{{ route('tasks.destroy', [$project->id, $task->id]) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -246,9 +249,12 @@
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+                                            @endcan
+                                            @can('Edit Task')
                                             <a href="{{ route('tasks.edit', [$project->id, $task->id]) }}" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach
@@ -258,14 +264,19 @@
                 @endif
             </div>
         </div>
+        @endcan
+        
 
+        @can('Products List')
         {{-- Project Products Table Card --}}
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Project Products</h5>
+                @can('Create Product')
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">
                     <i class="fas fa-plus me-2"></i> Create Product
                 </button>
+                @endcan
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -291,13 +302,19 @@
                                     <td>{{ isset($product->ProductNote) ? '1' : '0' }}</td>
                                     <td>{{ isset($product->finalFinishes) ? $product->finalFinishes->count() : '0' }}</td>
                                     <td>
+                                        @can('Products List')
                                         <div class="btn-group" role="group" aria-label="Product actions">
+                                            @can('View Product Details')
                                             <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-info" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            @endcan
+                                            @can('Edit Product')
                                             <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                            @endcan
+                                            @can('Delete Product')
                                             <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -305,7 +322,9 @@
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -314,6 +333,7 @@
                 </div>
             </div>
         </div>
+        @endcan
 
         {{-- Create Product Modal --}}
         <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">

@@ -12,107 +12,119 @@
 
         <ul class="navbar-nav flex-fill w-100 mb-2">
 
+            @can('Dashboard')
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/') }}">
                 <i class="fa-solid fa-gauge"></i>
-                    <span class="ml-3 item-text">{{ __('Dashboard') }}</span>
+                    <span class="ml-3 item-text">{{ __('en::en.Dashboard') }}</span>
                 </a>
             </li>
-                @can('Roles List')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('roles.index') }}">
-                    <i class="fa-brands fa-critical-role"></i>
-                        <span class="ml-3 item-text">{{ __('Manage Roles') }}</span>
-                    </a>
-                </li>
-                @endcan
-                @can('Permission List')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('permissions.index') }}">
-                    <i class="fa-solid fa-universal-access"></i>
-                        <span class="ml-3 item-text">{{ __('Manage Permissions') }}</span>
-                    </a>
-                </li>
-                @endcan
-                
-                @can('user list')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.index') }}">
-                        <i class="fe fe-users"></i>
-                        <span class="ml-3 item-text">{{ __('Users') }}</span>
-                    </a>
-                </li>
-                @endcan
+            @endcan
 
+            @can('Roles List')
+            <li class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle nav-link">
+                    <i class="fa-brands fa-critical-role"></i>
+                    <span class="ml-3 item-text">{{ __('sidebar.Manage Roles') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @can('Create Role')
+                    <li class="nav-item">
+                        <a class="dropdown-item" href="{{ route('roles.create') }}">
+                            <i class="fas fa-plus-circle"></i> {{ __('Create New Role') }}
+                        </a>
+                    </li>
+                    @endcan
+                    <li class="nav-item">
+                        <a class="dropdown-item" href="{{ route('roles.index') }}">
+                            <i class="fas fa-list"></i> {{ __('View Roles') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endcan
+
+            @can('Permission List')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('permissions.index') }}">
+                <i class="fa-solid fa-universal-access"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Manage Permissions') }}</span>
+                </a>
+            </li>
+            @endcan
+
+            @can('user list')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('users.index') }}">
+                    <i class="fe fe-users"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Users') }}</span>
+                </a>
+            </li>
+            @endcan
+
+            @can('Projects List')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('projects.index') }}">
+                    <i class="fas fa-project-diagram"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Projects') }}</span>
+                </a>
+            </li>
+            @endcan
+
+            @can('Clients List')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('clients.index') }}">
+                    <i class="fas fa-users"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Clients') }}</span>
+                </a>
+            </li>
+            @endcan
+
+            @can('Tasks List')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('my-tasks') }}">
                     <i class="fa-solid fa-list-check"></i>
-                    <span class="ml-3 item-text">@if(Auth::user()->user_type == 'Admin') {{ __('All Tasks') }} @else {{ __('My Tasks') }} @endif</span>
+                    <span class="ml-3 item-text">@if(Auth::user()->user_type == 'Admin') {{ __('en::en.All Tasks') }} @else {{ __('en::en.My Tasks') }} @endif</span>
                 </a>
             </li>
-            @can('Projects List')
-            <ul class="navbar-nav flex-fill w-100 mb-2">
-                <li class="nav-item dropdown">
-                <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                    <i class="fe fe-file fe-16"></i>
-                    <span class="ml-3 item-text">Project</span><span class="sr-only">(current)</span>
-                </a>
-                <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
-                    @can('Create Project')
-                    <li class="nav-item active">
-                    <a class="nav-link pl-3" href="{{ route('projects.create') }}"><span class="ml-1 item-text">Create</span></a>
-                    </li>
-                    @endcan
-                    @can('Projects List')
-                    <li class="nav-item">
-                    <a class="nav-link pl-3" href="{{ route('projects.index') }}"><span class="ml-1 item-text">Project List</span></a>
-                    </li>
-                    @endcan
-                </ul>
-                </li>
-            </ul>
             @endcan
 
             @can('Items List')
-                <li class="nav-item dropdown">
-                    <a href="{{ route('items.index') }}" class="nav-link">
-                    <i class="fa-solid fa-sitemap"></i>
-                        <span class="ml-3 item-text">{{ __('Items') }}</span>
-                    </a>
-                </li>
-            @endcan
-            @can('Products List')
-                <li class="nav-item dropdown">
-                    <a href="{{ route('products.index') }}" class="nav-link">
-                        <i class="fa-brands fa-product-hunt"></i>
-                        <span class="ml-3 item-text">{{ __('Products') }}</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('items.index') }}">
+                    <i class="fas fa-cube"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Items') }}</span>
+                </a>
+            </li>
             @endcan
 
             @can('Suppliers List')
-                <li class="nav-item dropdown">
-                    <a href="{{ route('suppliers.index') }}" class="nav-link">
-                        <i class="fa-solid fa-truck"></i>
-                        <span class="ml-3 item-text">{{ __('Suppliers') }}</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('suppliers.index') }}">
+                    <i class="fa-solid fa-truck"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Suppliers') }}</span>
+                </a>
+            </li>
             @endcan
-            @can('Clients List')
-                <li class="nav-item dropdown">
-                    <a href="{{ route('clients.index') }}" class="nav-link">
-                    <i class="fa-solid fa-people-arrows"></i>
-                        <span class="ml-3 item-text">{{ __('Clients') }}</span>
-                    </a>
-                </li>
-            @endcan
+
             @can('Send Email')
-                <li class="nav-item dropdown">
-                    <a href="{{ route('email.form') }}" class="nav-link">
-                        <i class="fa-regular fa-envelope"></i>
-                        <span class="ml-3 item-text">{{ __('Send Email') }}</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('email.form') }}">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Send Email') }}</span>
+                </a>
+            </li>
+            @endcan
+
+
+
+            @can('Send Email')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('email.form') }}">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span class="ml-3 item-text">{{ __('en::en.Send Email') }}</span>
+                </a>
+            </li>
             @endcan
         </ul>
 

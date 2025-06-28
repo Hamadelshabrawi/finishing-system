@@ -29,12 +29,12 @@
                 <div class="mb-3">
                     <label for="role" class="form-label fw-bold">Role</label>
                     <select name="role" id="role" class="form-control shadow-sm rounded" required>
-                        <option value="Admin" {{ old('type', $user->type) === 'Admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="Technical" {{ old('type', $user->type) === 'Technical' ? 'selected' : '' }}>Technical</option>
-                        <option value="Financial" {{ old('type', $user->type) === 'Financial' ? 'selected' : '' }}>Financial</option>
-                        <option value="Operations Manager" {{ old('type', $user->type) === 'Operations Manager' ? 'selected' : '' }}>Operations Manager</option>
-                        <option value="Storekeeper" {{ old('type', $user->type) === 'Storekeeper' ? 'selected' : '' }}>Storekeeper</option>
-                        <option value="User" {{ old('type', $user->type) === 'User' ? 'selected' : '' }}>User</option>
+                        <option value="Admin" {{ old('user_type', $user->user_type) === 'Admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="Technical" {{ old('user_type', $user->user_type) === 'Technical' ? 'selected' : '' }}>Technical</option>
+                        <option value="Financial" {{ old('user_type', $user->user_type) === 'Financial' ? 'selected' : '' }}>Financial</option>
+                        <option value="Operations Manager" {{ old('user_type', $user->user_type) === 'Operations Manager' ? 'selected' : '' }}>Operations Manager</option>
+                        <option value="Storekeeper" {{ old('user_type', $user->user_type) === 'Storekeeper' ? 'selected' : '' }}>Storekeeper</option>
+                        <option value="User" {{ old('user_type', $user->user_type) === 'User' ? 'selected' : '' }}>User</option>
                     </select>
                 </div>
                 @error('role')
@@ -45,6 +45,10 @@
                     <label for="password" class="form-label fw-bold">New Password (Optional)</label>
                     <input type="password" name="password" id="password" class="form-control shadow-sm rounded">
                     <small class="text-muted">Leave blank if you don’t want to change the password.</small>
+                </div>
+                <div class="mb-3">
+                    <label for="password_confirmation" class="form-label fw-bold">Confirm New Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control shadow-sm rounded">
                 </div>
                 @error('password')
                     <div class="alert alert-danger">{{ $message }}</div>

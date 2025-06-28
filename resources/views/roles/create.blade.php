@@ -3,7 +3,6 @@
 @section('title', 'Create Role')
 
 @section('content')
-<div class="container mt-4">
     <div class="card shadow-lg border-0">
         <div class="card-header bg-dark text-white">
             <h3 class="mb-0 text-center" style="color:white">Create a New Role</h3>
@@ -13,7 +12,6 @@
                 @csrf
 
                 <div class="row">
-                    <!-- Left Column: Role Name -->
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="name" class="form-label fw-bold">Role Name</label>
@@ -21,18 +19,13 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Permissions -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Permissions</label>
-                        <div class="d-flex flex-wrap">
+                        <select name="permissions[]" id="permissionSelect" class="form-control" multiple="multiple" style="width: 100%">
                             @foreach($permissions as $permission)
-                                <div class="form-check me-3">
-                                    <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
-                                        class="form-check-input">
-                                    <label class="form-check-label">{{ $permission->name }}</label>
-                                </div>
+                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
                             @endforeach
-                        </div>
+                        </select>
                     </div>
                 </div>
 
@@ -44,5 +37,16 @@
             </form>
         </div>
     </div>
-</div>
 @endsection
+
+{{-- Add this script section --}}
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#permissionSelect').select2({
+            placeholder: "Select permissions", 
+            allowClear: true
+        });
+    });
+</script>
+@endpush

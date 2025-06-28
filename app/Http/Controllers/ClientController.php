@@ -12,10 +12,11 @@ class ClientController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can:Clients List')->only(['index']);
-        $this->middleware('can:Create Client')->only(['create', 'store']);
-        $this->middleware('can:Edit Client')->only(['edit', 'update']);
-        $this->middleware('can:Delete Client')->only(['destroy']);
+        $this->middleware(['auth', 'can:Clients List'])->only('index');
+        $this->middleware(['auth', 'can:Create Client'])->only(['create', 'store']);
+        $this->middleware(['auth', 'can:Edit Client'])->only(['edit', 'update']);
+        $this->middleware(['auth', 'can:Delete Client'])->only('destroy');
+        $this->middleware(['auth', 'can:Search Clients'])->only('search');
     }
 
     public function index(Request $request)

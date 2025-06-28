@@ -10,8 +10,23 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        // Apply middleware for each action
+        $this->middleware('can:Projects List')->only(['index', 'myTasks']);
+        $this->middleware('can:Create Task')->only(['create', 'store']);
+        $this->middleware('can:Edit Task')->only(['edit', 'update']);
+        $this->middleware('can:Delete Task')->only(['destroy']);
+        $this->middleware('can:View Task Details')->only(['show']);
+        $this->middleware('can:Assign Task')->only(['assign']);
+    }
+
     public function index($projectId)
     {
+        if (!auth()->user()->can('View Project Tasks')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $tasks = Task::with('assignedTo')
             ->where('project_id', $projectId)
             ->get();

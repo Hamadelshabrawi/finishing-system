@@ -17,7 +17,7 @@ class FinalFinishController extends Controller
         $existingFinish = FinalFinish::where('product_id', $product->id)->first();
 
         if ($existingFinish) {
-            return redirect()->route('products.show', $product)
+            return redirect('/products/' . $product->id)
                 ->with('warning', 'Final finishes already exist for this product');
         }
 
@@ -39,7 +39,7 @@ class FinalFinishController extends Controller
         if ($existingFinish) {
             // Update existing record
             $existingFinish->update($request->all());
-            return redirect()->route('products.show', $product)
+            return redirect('/products/' . $product->id)
                 ->with('success', 'Final finishes updated successfully');
         }
 
@@ -48,7 +48,7 @@ class FinalFinishController extends Controller
         $finalFinish->product_id = $product->id;
         $finalFinish->save();
         
-        return redirect()->route('products.show', $product)
+        return redirect('/products/' . $product->id)
             ->with('success', 'Final finishes added successfully');
     }
 
@@ -67,10 +67,17 @@ class FinalFinishController extends Controller
             'polishing' => 'nullable|string',
         ]);
 
+        // Check if final finish exists for this product
         $finalFinish = $product->finalFinish;
+        
+        if (!$finalFinish) {
+            return redirect('/products/' . $product->id)
+                ->with('error', 'No final finishes found for this product');
+        }
+
         $finalFinish->update($request->all());
 
-        return redirect()->route('products.show', $product)
+        return redirect('/products/' . $product->id)
             ->with('success', 'Final finishes updated successfully');
     }
 

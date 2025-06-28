@@ -14,38 +14,38 @@ public function run()
 {
     $permissions = [
         // Project related permissions
-        'view projects',
-        'create projects',
-        'edit projects',
-        'delete projects',
-        'approve projects',
-        'view project files',
-        'upload project files',
-        'delete project files',
+        'Projects List',
+        'Create Project',
+        'Edit Project',
+        'Delete Project',
+        'Approve Project',
+        'View Project Files',
+        'Upload Project File',
+        'Delete Project File',
         
         // Client related permissions
-        'view clients',
-        'create clients',
-        'edit clients',
-        'delete clients',
+        'Clients List',
+        'Create Client',
+        'Edit Client',
+        'Delete Client',
         
         // Product related permissions
-        'view products',
-        'create products',
-        'edit products',
-        'delete products',
+        'Products List',
+        'Create Product',
+        'Edit Product',
+        'Delete Product',
         
         // Material related permissions
-        'view materials',
-        'create materials',
-        'edit materials',
-        'delete materials',
+        'Materials List',
+        'Create Material',
+        'Edit Material',
+        'Delete Material',
         
         // Final Finish related permissions
-        'view final finishes',
-        'create final finishes',
-        'edit final finishes',
-        'delete final finishes',
+        'Final Finish List',
+        'Create Final Finish',
+        'Edit Final Finish',
+        'Delete Final Finish',
         
         // Outsource related permissions
         'view outsources',

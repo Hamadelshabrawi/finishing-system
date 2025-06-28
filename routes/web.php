@@ -192,6 +192,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
+    Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UserController::class);
 });

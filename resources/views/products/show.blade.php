@@ -26,22 +26,29 @@
                             <div class="card">
                                 <div class="card-header">Actions</div>
                                 <div class="card-body">
+                                    @can('Edit Product')
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+                                    @endcan
+                                    @can('Consume Item')
                                     <a href="{{ route('products.items.consume.create', $product) }}" class="btn btn-info">Consume Items</a>
+                                    @endcan
                                     <a href="{{ route('projects.show', $product->project->id) }}" class="btn btn-secondary">Back</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    @can('Items List')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Items</h5>
+                                    @can('Edit Item')
                                     <a href="{{ route('product.items.index', $product->id) }}" class="btn btn-primary ">
                                         <i class="fas fa-edit me-2"></i>Manage Items
                                     </a>
+                                    @endcan
                                 </div>
                                 <div class="card-body">
                                     @if($product->items->isEmpty())
@@ -72,15 +79,19 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('View Supplier Outsourcing')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Outsources</h5>
-                                        <a href="{{ route('product.outsources.index', $product) }}" class="btn btn-primary">
-                                            <i class="fas fa-external-link-alt me-2"></i>Manage Outsourcing
-                                        </a>
+                                    @can('Edit Supplier')
+                                    <a href="{{ route('product.outsources.index', $product) }}" class="btn btn-primary">
+                                        <i class="fas fa-external-link-alt me-2"></i>Manage Outsourcing
+                                    </a>
+                                    @endcan
                                 </div>
                                 <div class="card-body">
                                     @if($product->outsources->isEmpty())
@@ -111,14 +122,19 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
+
+                    @can('View Product Details')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Product Files</h5>
+                                    @can('Create Product')
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
                                         <i class="fas fa-upload me-2"></i>Upload Files
                                     </button>
+                                    @endcan
                                 </div>
                                 <div class="card-body">
                                     @if($product->files->isEmpty())
@@ -144,6 +160,7 @@
                                                                 <a href="{{ route('products.files.download', ['product' => $product->id, 'file' => $file->id]) }}" class="btn btn-sm btn-outline-primary">
                                                                     <i class="fas fa-download"></i> Download
                                                                 </a>
+                                                                @can('Delete Product')
                                                                 <form action="{{ route('products.files.destroy', ['product' => $product->id, 'file' => $file->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this file?')">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -151,6 +168,7 @@
                                                                         <i class="fas fa-trash"></i> Delete
                                                                     </button>
                                                                 </form>
+                                                                @endcan
                                                             </div>
                                                         </div>
                                                     </div>
@@ -162,7 +180,9 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('View Product Details')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
@@ -170,13 +190,17 @@
                                     <h5 class="mb-0">Final Finishes for {{ $product->name }}</h5>
                                     <div class="btn-group">
                                         @if(!$product->finalFinish)
+                                            @can('Create Product')
                                             <a href="{{ route('products.final-finish.create', $product) }}" class="btn btn-primary">
                                                 <i class="fas fa-plus me-2"></i>Add Final Finishes
                                             </a>
+                                            @endcan
                                         @else
+                                            @can('Edit Product')
                                             <a href="{{ route('products.final-finish.edit', $product) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit me-2"></i>Edit Final Finishes
                                             </a>
+                                            @endcan
                                         @endif
                                     </div>
                                 </div>
@@ -185,32 +209,24 @@
                                     @if(!$product->finalFinish)
                                         <p class="text-muted">No final finishes added yet.</p>
                                     @else
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="card mb-3">
-                                                    <div class="card-header">
-                                                        <h6 class="mb-0">Internal Paint (دهانات داخلية)</h6>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <p>{{ $product->finalFinish->internal_paint }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="card mb-3">
-                                                    <div class="card-header">
-                                                        <h6 class="mb-0">Electrostatic (الكتروستاتيك)</h6>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <p>{{ $product->finalFinish->electrostatic }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="card mb-3">
-                                                    <div class="card-header">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Final Finish</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Total Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $product->finalFinish->final_finish }}</td>
+                                                    <td>{{ $product->finalFinish->quantity }}</td>
+                                                    <td>{{ $product->finalFinish->unit_price }}</td>
+                                                    <td>{{ $product->finalFinish->total_price }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                                         <h6 class="mb-0">PVD</h6>
                                                     </div>
                                                     <div class="card-body">
@@ -235,7 +251,8 @@
                             </div>
                         </div>
                     </div>
-
+                    @endcan
+                    @can('View Product Details')
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card">
@@ -275,6 +292,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
                 </div>
             </div>
         </div>

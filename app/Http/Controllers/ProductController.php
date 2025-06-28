@@ -10,13 +10,33 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:Products List')->only(['index']);
+        $this->middleware('can:Create Product')->only(['create', 'store']);
+        $this->middleware('can:Edit Product')->only(['edit', 'update']);
+        $this->middleware('can:Delete Product')->only(['destroy']);
+        $this->middleware('can:View Product Details')->only(['show']);
+        $this->middleware('can:Export Product')->only(['export']);
+    }
+
+    /**
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::with(['project', 'items', 'outsources', 'finalFinish'])
-            ->paginate(10);
+        if (!auth()->user()->can('View Project Products')) {
+            // Get products for projects the user has access to
+            $products = Product::with(['project', 'items', 'outsources', 'finalFinish'])
+                ->whereHas('project', function($query) {
+                    $query->where('created_by', auth()->id());
+                })
+                ->paginate(10);
+        } else {
+            $products = Product::with(['project', 'items', 'outsources', 'finalFinish'])
+                ->paginate(10);
+        }
 
         return view('products.index', compact('products'));
     }

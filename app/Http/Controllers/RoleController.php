@@ -11,7 +11,7 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->middleware('can:Roles List')->only(['index']);
-        $this->middleware('can:Create Roles')->only(['create', 'store']);
+        $this->middleware('can:Create Role')->only(['create', 'store']);
         $this->middleware('can:Edit Role')->only(['edit', 'update']);
         $this->middleware('can:Delete Role')->only(['destroy']);
     }
@@ -77,11 +77,17 @@ class RoleController extends Controller
             $role->syncPermissions($permissions);
         }
     
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully!');
+        return redirect()->back()->with('success', 'Role updated successfully!');
     }
     
 
     // Remove the specified role
+    public function show($id)
+    {
+        $role = Role::findOrFail($id);
+        return view('roles.show', compact('role'));
+    }
+
     public function destroy($id)
     {
         $role = Role::findOrFail($id);

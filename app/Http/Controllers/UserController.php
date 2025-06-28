@@ -66,7 +66,7 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
-        $user->type = $request->input('role');
+        $user->user_type = $request->input('role');
         $user->assignRole($data['role']);
         $user->update($data);
     

@@ -10,6 +10,15 @@ use App\Models\Product;
 
 class SupplierController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:Suppliers List'])->only('index');
+        $this->middleware(['auth', 'can:Create Supplier'])->only(['create', 'store']);
+        $this->middleware(['auth', 'can:Edit Supplier'])->only(['edit', 'update']);
+        $this->middleware(['auth', 'can:Delete Supplier'])->only('destroy');
+        $this->middleware(['auth', 'can:View Supplier Outsourcing'])->only('supplierOutsources');
+    }
+
     public function index()
     {
         $suppliers = Supplier::with(['outsources'])->get();

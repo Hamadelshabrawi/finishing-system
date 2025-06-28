@@ -44,9 +44,23 @@
 <script src="{{ asset('Assets/en/js/uppy.min.js') }}"></script>
 <script src="{{ asset('Assets/en/js/quill.min.js') }}"></script>
 <script>
-  $('.select2').select2(
-  {
+  // Initialize all select2 elements
+  $('.select2').select2({
     theme: 'bootstrap4',
+  });
+
+  // Initialize permission select with additional features
+  $('#permissionSelect').select2({
+    placeholder: 'Select permissions...',
+    allowClear: true,
+    width: '100%',
+    theme: 'bootstrap4',
+    dropdownCssClass: 'select2-dropdown',
+    language: {
+      noResults: function() {
+        return 'No permissions found';
+      }
+    }
   });
   $('.select2-multi').select2(
   {

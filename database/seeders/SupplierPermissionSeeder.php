@@ -10,10 +10,8 @@ class SupplierPermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'Suppliers List',
-            'Create Supplier',
-            'Edit Supplier',
-            'Delete Supplier',
+            'Manage Supplier Inventory',
+            'View Supplier Analytics',
         ];
 
         foreach ($permissions as $permission) {
