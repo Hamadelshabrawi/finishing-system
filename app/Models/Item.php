@@ -31,6 +31,11 @@ class Item extends Model
         return $this->hasMany(ItemPurchase::class);
     }
 
+    public function consumptionLogs()
+    {
+        return $this->hasMany(ItemConsumptionLog::class, 'item_id');
+    }
+
     public function materials()
     {
         return $this->hasMany(Material::class);

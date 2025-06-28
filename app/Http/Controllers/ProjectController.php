@@ -37,7 +37,16 @@ class ProjectController extends Controller
     {
         if ($request->ajax()) {
             $projects = Project::with(['client', 'products', 'creator'])
-                ->select('projects.*')
+                ->select([
+                    'projects.id',
+                    'projects.date',
+                    'projects.project_name',
+                    'projects.technical_approval',
+                    'projects.delivery_date',
+                    'projects.created_by',
+                    'projects.created_at',
+                    'projects.updated_at'
+                ])
                 ->latest();
     
             return DataTables::eloquent($projects)
@@ -48,7 +57,7 @@ class ProjectController extends Controller
                     return $project->products->count();
                 })
                 ->addColumn('status', function($project) {
-                    return $project->status_badge;
+                    return $project->statusBadge;
                 })
                 ->addColumn('creator_name', function($project) {
                     return optional($project->creator)->name ?? 'System';

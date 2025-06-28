@@ -41,9 +41,9 @@ class Product extends Model
     /**
      * Get all items for this product
      */
-    public function items(): HasMany
+    public function items()
     {
-        return $this->hasMany(ProductItem::class);
+        return $this->hasMany(ProductItem::class, 'product_id', 'id');
     }
 
     /**

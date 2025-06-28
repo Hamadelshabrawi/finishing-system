@@ -108,8 +108,8 @@
         let columns = [
             { data: 'date', name: 'date', className: 'text-center' },
             { data: 'project_name', name: 'project_name' },
-            { data: 'product_count', name: 'product_count', className: 'text-center' },
-            { data: 'technical_approval', name: 'technical_approval', className: 'text-center' }, // Ensure these map to your backend data
+            { data: 'product_count', name: 'products_count', className: 'text-center' },
+            { data: 'technical_approval', name: 'technical_approval', className: 'text-center' },
             { data: 'status', name: 'status', className: 'text-center' },
             { data: 'delivery_date', name: 'delivery_date', className: 'text-center' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false, className: 'actions-column text-center' }

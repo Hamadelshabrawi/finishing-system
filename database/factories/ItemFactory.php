@@ -55,7 +55,6 @@ class ItemFactory extends Factory
         return [
             'name' => $items[array_rand($items)],
             'unit' => $units[array_rand($units)],
-            'price' => $this->faker->randomFloat(2, 10, 1000),
             'description' => $this->faker->sentence,
         ];
     }

@@ -13,7 +13,6 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Unit</th>
-                <th>Selling Price</th>
                 <th>Total Stock</th>
                 <th class="text-center">Actions</th>
             </tr>
@@ -48,7 +47,6 @@ $(function () {
         },
         { data: 'name', name: 'name' },
         { data: 'unit', name: 'unit' },
-        { data: 'price', name: 'price' },
         { data: 'description', name: 'description' },
         { data: 'actions', name: 'actions', orderable: false, searchable: false }
     ];

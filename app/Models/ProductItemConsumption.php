@@ -13,16 +13,16 @@ class ProductItemConsumption extends Model
         'product_id',
         'item_id',
         'quantity',
-        'unit_price',
-        'total_price',
+        'unit_cost',
+        'total_cost',
         'notes',
-        'details'
+        'consumption_details'
     ];
 
     protected $casts = [
-        'total_price' => 'decimal:2',
-        'unit_price' => 'decimal:2',
-        'details' => 'array'
+        'total_cost' => 'decimal:2',
+        'unit_cost' => 'decimal:2',
+        'consumption_details' => 'array'
     ];
 
     public function product()

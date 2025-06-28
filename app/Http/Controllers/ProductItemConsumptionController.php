@@ -23,98 +23,95 @@ class ProductItemConsumptionController extends Controller
             'quantity' => 'required|integer|min:1',
             'notes' => 'nullable|string',
         ]);
-
+    
         $item = Item::findOrFail($validated['item_id']);
-        $quantity = $validated['quantity'];
-
-        // Calculate cost using FIFO method
+        $requiredQuantity = $validated['quantity'];
+    
+        // Get available purchases (FIFO)
         $purchases = $item->purchases()
             ->where('remaining_quantity', '>', 0)
             ->orderBy('purchase_date')
             ->get();
-
+    
+        // Step 1: Check if total available is enough
+        $availableQuantity = $purchases->sum('remaining_quantity');
+    
+        if ($availableQuantity < $requiredQuantity) {
+            return back()->withErrors([
+                'quantity' => 'Not enough stock to consume requested quantity. ' .
+                    'Available: ' . $availableQuantity . ' / Requested: ' . $requiredQuantity
+            ]);
+        }
+    
+        // Step 2: Proceed to consume now that we know it's safe
+        $remaining = $requiredQuantity;
         $totalCost = 0;
-        $totalQuantity = 0;
         $consumptionDetails = [];
-
+    
         foreach ($purchases as $purchase) {
-            if ($quantity <= 0) break;
-
+            if ($remaining <= 0) break;
+    
             $available = $purchase->remaining_quantity;
-            $deduct = min($quantity, $available);
-
+            $deduct = min($remaining, $available);
+    
             $purchase->remaining_quantity -= $deduct;
             $purchase->save();
-
-            // Calculate cost for consumed quantity
+    
             $totalCost += $deduct * $purchase->purchase_price;
-            $totalQuantity += $deduct;
-
+    
             $consumptionDetails[] = [
                 'purchase_date' => $purchase->purchase_date,
                 'purchase_price' => $purchase->purchase_price,
                 'quantity' => $deduct,
                 'total_cost' => $deduct * $purchase->purchase_price
             ];
-
-            $quantity -= $deduct;
+    
+            $remaining -= $deduct;
         }
-
-        if ($quantity > 0) {
-            return back()->withErrors([
-                'quantity' => 'Not enough stock to consume requested quantity. ' . 
-                'Available: ' . $totalQuantity . ' / Requested: ' . ($totalQuantity + $quantity)
-            ]);
-        }
-
-        // Update item stock and cost calculations
-        $item->decrement('total_stock', $totalQuantity);
-        $item->decrement('total_quantity', $totalQuantity);
+    
+        // Update item stock
+        $item->decrement('total_stock', $requiredQuantity);
+        $item->decrement('total_quantity', $requiredQuantity);
         $item->decrement('total_cost', $totalCost);
-
-        // Update current cost if there's still stock
+    
         if ($item->total_quantity > 0) {
             $item->current_cost = $item->total_cost / $item->total_quantity;
             $item->save();
         }
-
-        // Find or create product item record
+    
+        // Update or create product item
         $productItem = $product->items()->where('item_id', $item->id)->first();
-        
+    
         if ($productItem) {
-            // Update existing product item
-            $productItem->quantity += $totalQuantity;
+            $productItem->quantity += $requiredQuantity;
             $productItem->cost += $totalCost;
             $productItem->unit_cost = $productItem->cost / $productItem->quantity;
             $productItem->save();
         } else {
-            // Create new product item
             $product->items()->create([
                 'item_id' => $item->id,
-                'quantity' => $totalQuantity,
+                'quantity' => $requiredQuantity,
                 'cost' => $totalCost,
-                'unit_cost' => $totalCost / $totalQuantity,
+                'unit_cost' => $totalCost / $requiredQuantity,
                 'product_id' => $product->id
             ]);
         }
-
-        // Record consumption history
+    
         $product->consumptions()->create([
             'item_id' => $item->id,
-            'quantity' => $totalQuantity,
-            'unit_price' => $totalCost / $totalQuantity,
+            'quantity' => $requiredQuantity,
+            'unit_price' => $totalCost / $requiredQuantity,
             'total_price' => $totalCost,
             'notes' => $validated['notes'] ?? null,
             'details' => json_encode($consumptionDetails)
         ]);
-
-        // Update product cost
+    
         $this->updateProductCost($product);
-
+    
         return redirect()->route('products.show', $product)
-            ->with('success', 'Successfully consumed ' . $totalQuantity . ' units of ' . $item->name);
+            ->with('success', 'Successfully consumed ' . $requiredQuantity . ' units of ' . $item->name);
     }
-
+    
     private function updateProductCost(Product $product)
     {
         $totalCost = 0;
@@ -131,5 +128,4 @@ class ProductItemConsumptionController extends Controller
             $product->save();
         }
     }
-}
 }

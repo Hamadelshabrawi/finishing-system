@@ -105,8 +105,22 @@
             </div>
             <div class="col-6 col-lg-2 text-center py-4">
               <p class="mb-1 small text-muted">Project Completion</p>
-              <span class="h3">{{ number_format(($projectStats['completed_projects'] / $projectStats['total_projects']) * 100, 2) }}%</span><br />
-              <span class="small text-muted">+{{ number_format(($projectStats['completed_projects'] / $projectStats['total_projects']) * 100, 2) }}%</span>
+              @if ($projectStats['total_projects'] > 0)
+                  <span class="h3">
+                      {{ number_format(($projectStats['completed_projects'] / $projectStats['total_projects']) * 100, 2) }}%
+                  </span>
+              @else
+                  <span class="h3">0.00%</span>
+              @endif              
+              <br />
+
+              
+              <span class="small text-muted">
+                  +{{ $projectStats['total_projects'] > 0 
+                      ? number_format(($projectStats['completed_projects'] / $projectStats['total_projects']) * 100, 2) 
+                      : '0.00' }}%
+              </span>
+
               <span class="fe fe-arrow-up text-success fe-12"></span>
             </div>
           </div>

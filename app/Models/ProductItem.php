@@ -22,11 +22,6 @@ class ProductItem extends Model
         'unit_cost' => 'decimal:2'
     ];
 
-    protected $attributes = [
-        'unit_cost' => 0,
-        'cost' => 0
-    ];
-
     /**
      * Get the product that owns the product item.
      */
@@ -41,5 +36,13 @@ class ProductItem extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    /**
+     * Get the total cost for this product item.
+     */
+    public function getTotalCostAttribute()
+    {
+        return $this->quantity * $this->unit_cost;
     }
 }
