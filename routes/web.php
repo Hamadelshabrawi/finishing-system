@@ -23,6 +23,8 @@ use App\Http\Controllers\ProductFileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProductItemConsumptionController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TranslationController;
+use App\Http\Controllers\ProjectSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +64,28 @@ Route::post('/projects/{project}/approval', [ProjectController::class, 'updateAp
 Auth::routes();
 
 Auth::routes(['register' => true]);
+
+// Translations Routes
+Route::resource('translations', TranslationController::class)->names([
+    'index' => 'translations.index',
+    'create' => 'translations.create',
+    'store' => 'translations.store',
+    'edit' => 'translations.edit',
+    'update' => 'translations.update',
+    'destroy' => 'translations.destroy'
+]);
+
+// Project Settings Routes
+Route::resource('projects.settings', ProjectSettingController::class)->names([
+    'index' => 'projects.settings.index',
+    'create' => 'projects.settings.create',
+    'store' => 'projects.settings.store',
+    'edit' => 'projects.settings.edit',
+    'update' => 'projects.settings.update',
+    'destroy' => 'projects.settings.destroy'
+])->parameters([
+    'settings' => 'setting'
+]);
 
 // Product routes
 Route::middleware(['auth'])->group(function () {

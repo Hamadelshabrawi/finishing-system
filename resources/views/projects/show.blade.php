@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title') Show Project @endsection
+@section('title', \App\Models\Translation::getTranslation('view_project'))
 
 @section('content')
     <!-- Font Awesome for icons -->
@@ -9,19 +9,19 @@
     <div class="mt-4"> {{-- Removed .container as per instructions --}}
         {{-- Page Header and Action Buttons --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Project Details</h1>
+            <h1 class="mb-0">{{ \App\Models\Translation::getTranslation('project_details') }}</h1>
 
             <div class="d-flex flex-column flex-sm-row space-y-2 space-sm-x-3">
                 <div class="btn-group">
                     <a href="{{ route('projects.export', [$project->id, 'ar']) }}" class="btn btn-outline-dark">
-                        <i class="fas fa-file-export me-2"></i> Export PDF (Arabic)
+                        <i class="fas fa-file-export me-2"></i> {{ \App\Models\Translation::getTranslation('export_pdf_ar') }}
                     </a>
                     <a href="{{ route('projects.export', [$project->id, 'en']) }}" class="btn btn-outline-dark">
-                        <i class="fas fa-file-export me-2"></i> Export PDF (English)
+                        <i class="fas fa-file-export me-2"></i> {{ \App\Models\Translation::getTranslation('export_pdf_en') }}
                     </a>
                 </div>
                 <a href="{{ route('projects.index') }}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Projects
+                    <i class="fas fa-arrow-left me-2"></i> {{ \App\Models\Translation::getTranslation('back_to_projects') }}
                 </a>
             </div>
         </div>
@@ -29,7 +29,7 @@
         {{-- Alert Messages for Errors and Success --}}
         @if ($errors->any())
             <div class="alert alert-danger" role="alert">
-                <strong>There were some problems with your input:</strong>
+                <strong>{{ \App\Models\Translation::getTranslation('error_occurred') }}</strong>
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -54,19 +54,19 @@
                     {{-- Basic Information Section --}}
                     <div class="col-md-6">
                         <div class="info-section mb-4">
-                            <h5 class="section-title border-bottom pb-2 mb-3">Basic Information</h5>
+                            <h5 class="section-title border-bottom pb-2 mb-3">{{ \App\Models\Translation::getTranslation('basic_information') }}</h5>
                             <div class="row">
                                 <div class="col-6">
-                                    <p><strong>Date:</strong><br> {{ \Carbon\Carbon::parse($project->date)->format('M d, Y') }}</p>
-                                    <p><strong>Contract Value:</strong><br> {{ $project->contact_value }}</p>
-                                    <p><strong>Execution Period:</strong><br> {{ $project->execution_period }} days</p>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('start_date') }}:</strong><br> {{ \Carbon\Carbon::parse($project->date)->format('M d, Y') }}</p>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('contract_value') }}:</strong><br> {{ $project->contact_value }}</p>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('execution_period') }}:</strong><br> {{ $project->execution_period }} {{ \App\Models\Translation::getTranslation('days') }}</p>
                                 </div>
                                
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <p><strong>Delivery Date:</strong><br> {{ \Carbon\Carbon::parse($project->delivery_date)->format('M d, Y') }}</p>
-                                    <p><strong>Delivery Location:</strong><br> {{ $project->delivery_location }}</p>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('delivery_date') }}:</strong><br> {{ \Carbon\Carbon::parse($project->delivery_date)->format('M d, Y') }}</p>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('delivery_location') }}:</strong><br> {{ $project->delivery_location }}</p>
                                 </div>
                             </div>
                         </div>
@@ -75,19 +75,19 @@
                     {{-- Approvals & Client Information Section --}}
                     <div class="col-md-6">
                         <div class="info-section mb-4">
-                            <h5 class="section-title border-bottom pb-2 mb-3">Approvals @if(auth()->check() && auth()->user()->hasRole('Admin')) & Client @endif</h5>
+                            <h5 class="section-title border-bottom pb-2 mb-3">{{ \App\Models\Translation::getTranslation('approvals') }} @if(auth()->check() && auth()->user()->hasRole('Admin')) & {{ \App\Models\Translation::getTranslation('client') }} @endif</h5>
                             <div class="approval-badges mb-3">
                                 <span class="badge bg-{{ $project->technical_approval === 'approved' ? 'success' : ($project->technical_approval === 'rejected' ? 'danger' : 'warning') }} ms-2">
-                                    Technical: {{ ucfirst($project->technical_approval) }}
+                                    {{ \App\Models\Translation::getTranslation('technical_approval') }}: {{ \App\Models\Translation::getTranslation($project->technical_approval) }}
                                 </span>
                                 {{-- Project Status (from previous Project Information card, now integrated here) --}}
                                 <span class="badge {{ $project->status == 'Completed' ? 'bg-success' : ($project->status == 'In Progress' ? 'bg-warning text-dark' : 'bg-info') }} ms-2">
-                                    Status: {{ $project->status }}
+                                    {{ \App\Models\Translation::getTranslation('status') }}: {{ \App\Models\Translation::getTranslation($project->status) }}
                                 </span>
                             </div>
                             @if(auth()->check() && auth()->user()->hasRole('Admin'))
                                 <div class="client-info">
-                                    <p><strong>Client:</strong><br>
+                                    <p><strong>{{ \App\Models\Translation::getTranslation('client') }}:</strong><br>
                                         {{ $project->client->name }}<br>
                                         @if($project->client->company_name)
                                             {{ $project->client->company_name }}<br>

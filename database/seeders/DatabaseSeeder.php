@@ -27,39 +27,78 @@ class DatabaseSeeder extends Seeder
         ]);
         
         // Create admin user if it doesn't exist
-        $adminUser = \App\Models\User::where('email', 'admin@admin.com')->first();
+        $adminUser = \App\Models\User::where('email', 'admin@example.com')->first();
         if (!$adminUser) {
             $adminUser = \App\Models\User::create([
                 'name' => 'Admin User',
-                'email' => 'admin@admin.com',
+                'email' => 'admin@example.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('password'),
                 'user_type' => 'Admin'
             ]);
             $adminUser->assignRole('Admin');
         }
+
+        // Create clients first
+        $clients = \App\Models\Client::factory()->count(5)->create();
         
-        // Create items first
-        \App\Models\Item::factory()->count(25)->create();
+        // Create materials
+        $materials = \App\Models\Material::factory()->count(10)->create();
         
-        // Create 5 clients
+        // Create final finishes
+        $finalFinishes = \App\Models\FinalFinish::factory()->count(10)->create();
+        
+        // Create items
+        $items = \App\Models\Item::factory()->count(25)->create();
+        
+        // Create projects with proper relationships
+        $projects = \App\Models\Project::factory()
+            ->count(5)
+            ->create()
+            ->each(function ($project) use ($clients, $adminUser) {
+                $project->client_id = $clients->random()->id;
+                $project->created_by = $adminUser->id;
+                $project->save();
+            });
+        
+        // Create item purchases
+        \App\Models\ItemPurchase::factory()
+            ->count(10)
+            ->make()
+            ->each(function ($purchase) use ($items) {
+                $purchase->item_id = $items->random()->id;
+                $purchase->save();
+            });
+        
+        // Create jobs
+        \App\Models\Job::factory()
+            ->count(10)
+            ->make()
+            ->each(function ($job) use ($projects) {
+                $job->project_id = $projects->random()->id;
+                $job->save();
+            });
+        
+        // Create outsources
+        \App\Models\Outsource::factory()
+            ->count(10)
+            ->make()
+            ->each(function ($outsource) use ($projects) {
+                $outsource->project_id = $projects->random()->id;
+                $outsource->save();
+            });
+        \App\Models\Product::factory()->count(10)->create();
+
+        // Seed translations after basic models are created
+        $this->call([
+            ProjectTranslationsSeeder::class
+        ]);
+
+        // Create additional clients and projects with products
         \App\Models\Client::factory(5)->create();
-        
-        // Create 5 projects with 3 products each
         \Database\Factories\ProjectFactory::new()->count(5)
             ->has(
                 \App\Models\Product::factory(3)
             )
             ->create();
-        
-        // Then create other models
-        \App\Models\User::factory()->count(10)->create();
-        \App\Models\Client::factory()->count(5)->create();
-        \App\Models\Project::factory()->count(5)->create();
-        \App\Models\Material::factory()->count(10)->create();
-        \App\Models\FinalFinish::factory()->count(10)->create();
-        \App\Models\ItemPurchase::factory()->count(10)->create();
-        \App\Models\Job::factory()->count(10)->create();
-        \App\Models\Outsource::factory()->count(10)->create();
-        \App\Models\Product::factory()->count(10)->create();
     }
 }

@@ -24,13 +24,13 @@ class ProjectFactory extends Factory
             'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'project_name' => $this->faker->sentence(3),
             'contact_value' => $this->faker->numberBetween(1, 100),
-            'execution_period' => $this->faker->numberBetween(1, 12), // Changed to just integer value
+            'execution_period' => $this->faker->numberBetween(1, 12),
             'delivery_date' => $this->faker->dateTimeBetween('now', '+6 months'),
             'delivery_location' => $this->faker->address,
-            'client_id' => \Database\Factories\ClientFactory::new()->create()->id, // Use a random existing client
+            'client_id' => \Database\Factories\ClientFactory::new()->create()->id,
             'description' => $this->faker->paragraph,
             'technical_approval' => $this->faker->randomElement(['pending', 'approved', 'need_modify', 'dismissed']),
-            'created_by' => 1, // Admin user ID
+            'created_by' => \App\Models\User::where('email', 'admin@example.com')->firstOrFail()->id,
             'created_at' => now(),
             'updated_at' => now(),
         ];

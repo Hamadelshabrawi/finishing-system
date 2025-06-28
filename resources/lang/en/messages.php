@@ -1,0 +1,56 @@
+<?php
+return [
+    'language_changed' => 'Language changed successfully',
+    'sidebar' => [
+        'dashboard' => 'Dashboard',
+        'manage_roles' => 'Manage Roles',
+        'create_role' => 'Create New Role',
+        'view_roles' => 'View Roles',
+        'manage_permissions' => 'Manage Permissions',
+        'users' => 'Users',
+        'projects' => 'Projects',
+        'clients' => 'Clients',
+        'all_tasks' => 'All Tasks',
+        'my_tasks' => 'My Tasks',
+        'items' => 'Items',
+        'suppliers' => 'Suppliers',
+        'send_email' => 'Send Email'
+    ],
+    'project_settings' => [
+        'title' => 'Project Settings',
+        'create' => 'Create Setting',
+        'edit' => 'Edit Setting',
+        'key' => 'Key',
+        'name' => 'Name',
+        'value' => 'Value',
+        'description' => 'Description',
+        'type' => 'Type',
+        'required' => 'Required',
+        'sort_order' => 'Sort Order',
+        'text' => 'Text',
+        'number' => 'Number',
+        'textarea' => 'Textarea',
+        'select' => 'Select',
+        'setting_created' => 'Project setting created successfully',
+        'setting_updated' => 'Project setting updated successfully',
+        'setting_deleted' => 'Project setting deleted successfully'
+    ],
+    'translations' => [
+        'title' => 'Translations Management',
+        'create' => 'Create Translation',
+        'edit' => 'Edit Translation',
+        'key' => 'Key',
+        'value_en' => 'English Value',
+        'value_ar' => 'Arabic Value',
+        'group' => 'Group',
+        'description' => 'Description',
+        'is_active' => 'Active',
+        'translation_created' => 'Translation created successfully',
+        'translation_updated' => 'Translation updated successfully',
+        'translation_deleted' => 'Translation deleted successfully',
+        'no_translations' => 'No translations found',
+        'confirm_delete' => 'Are you sure you want to delete this translation?',
+        'save' => 'Save',
+        'cancel' => 'Cancel'
+    ]
+];

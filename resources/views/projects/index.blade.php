@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Projects')
+@section('title', \App\Models\Translation::getTranslation('title'))
 
 @section('content')
 <div class="container-fluid mt-3">
     <div class="row mb-4 align-items-center"> {{-- Added align-items-center for vertical alignment --}}
         <div class="col-md-6">
-            <h1 class="mb-0">Projects</h1> {{-- Removed bottom margin for better alignment --}}
+            <h1 class="mb-0">{{ \App\Models\Translation::getTranslation('title') }}</h1> {{-- Removed bottom margin for better alignment --}}
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0"> {{-- Adjusted for responsive text alignment and margin --}}
             @can('Create Project')
             <a href="{{ route('projects.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i> Create New Project {{-- Added me-2 for spacing --}}
+                <i class="fas fa-plus me-2"></i> {{ \App\Models\Translation::getTranslation('create_project') }} {{-- Added me-2 for spacing --}}
             </a>
             @endcan
         </div>
@@ -23,17 +23,17 @@
                 <table class="table table-bordered table-hover w-100" id="projects-table"> {{-- Added w-100 for full width --}}
                     <thead class="thead-light">
                         <tr>
-                            <th>Date</th>
-                            <th>Project Name</th>
+                            <th>{{ \App\Models\Translation::getTranslation('date') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('project_name') }}</th>
                             @role('Admin')
-                            <th>Client</th>
-                            <th>Created By</th>
+                            <th>{{ \App\Models\Translation::getTranslation('client') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('created_by') }}</th>
                             @endrole
-                            <th>Products</th>
-                            <th>Technical Approval</th>
-                            <th>Status</th>
-                            <th>Delivery Date</th>
-                            <th class="text-center">Actions</th> {{-- Centered Actions column header --}}
+                            <th>{{ \App\Models\Translation::getTranslation('products') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('technical_approval') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('status') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('delivery_date') }}</th>
+                            <th class="text-center">{{ \App\Models\Translation::getTranslation('actions') }}</th> {{-- Centered Actions column header --}}
                         </tr>
                     </thead>
                     <tbody>

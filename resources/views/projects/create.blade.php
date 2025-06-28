@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title') Create New Project @endsection
+@section('title', \App\Models\Translation::getTranslation('create_project'))
 
 @section('content')
 
     @include('projects.partials.style')
 
-    <h1>Create New Project</h1>
+    <h1>{{ \App\Models\Translation::getTranslation('create_project') }}</h1>
 
     <form id="projectForm" action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -14,83 +14,83 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="date">Start Date</label>
+                    <label for="date">{{ \App\Models\Translation::getTranslation('start_date') }}</label>
                     <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" required value="{{ old('date') }}">
                     @error('date')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'start date']) }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="project_name">Project Name</label>
+                    <label for="project_name">{{ \App\Models\Translation::getTranslation('project_name') }}</label>
                     <input type="text" name="project_name" id="project_name" class="form-control @error('project_name') is-invalid @enderror" required value="{{ old('project_name') }}">
                     @error('project_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="contact_value">Contract Value</label>
+                    <label for="contact_value">{{ \App\Models\Translation::getTranslation('contact_value') }}</label>
                     <input type="number" name="contact_value" id="contact_value" class="form-control @error('contact_value') is-invalid @enderror" required min="1" value="{{ old('contact_value') }}">
                     @error('contact_value')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('min_value', ['0' => '1']) }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="execution_period">Execution Period (days)</label>
+                    <label for="execution_period">{{ \App\Models\Translation::getTranslation('execution_period') }}</label>
                     <input type="number" name="execution_period" id="execution_period" class="form-control @error('execution_period') is-invalid @enderror" required min="1" value="{{ old('execution_period') }}">
                     @error('execution_period')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('min_value', ['0' => '1']) }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="delivery_date">Delivery Date</label>
+                    <label for="delivery_date">{{ \App\Models\Translation::getTranslation('delivery_date') }}</label>
                     <input type="date" name="delivery_date" id="delivery_date" class="form-control @error('delivery_date') is-invalid @enderror" required value="{{ old('delivery_date') }}">
                     @error('delivery_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'delivery date']) }}</div>
                     @enderror
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="technical_approval">Project Status</label>
+                    <label for="technical_approval">{{ \App\Models\Translation::getTranslation('technical_approval') }}</label>
                     <select name="technical_approval" class="form-control @error('technical_approval') is-invalid @enderror" required>
-                        <option value="pending" {{ old('technical_approval', 'pending') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="approved" {{ old('technical_approval') == 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="need_modify" {{ old('technical_approval') == 'need_modify' ? 'selected' : '' }}>Need Modify</option>
-                        <option value="dismissed" {{ old('technical_approval') == 'Dismissed' ? 'selected' : '' }}>Dismissed</option>
+                        <option value="pending" {{ old('technical_approval', 'pending') == 'pending' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('pending_approval') }}</option>
+                        <option value="approved" {{ old('technical_approval') == 'approved' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('approved') }}</option>
+                        <option value="need_modify" {{ old('technical_approval') == 'need_modify' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('need_modify') }}</option>
+                        <option value="dismissed" {{ old('technical_approval') == 'dismissed' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('dismissed') }}</option>
                     </select>
                     @error('technical_approval')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="delivery_location">Delivery Location</label>
+                    <label for="delivery_location">{{ \App\Models\Translation::getTranslation('delivery_location') }}</label>
                     <input type="text" name="delivery_location" id="delivery_location" class="form-control @error('delivery_location') is-invalid @enderror" required value="{{ old('delivery_location') }}">
                     @error('delivery_location')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
                 </div>
             </div>
 
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="client_id">Client *</label>
+                        <label for="client_id">{{ \App\Models\Translation::getTranslation('client') }}</label>
                         <div class="input-group">
                             <select name="client_id" id="client_id" class="form-control @error('client_id') is-invalid @enderror" required>
-                                <option value="">Select a client</option>
+                                <option value="">{{ \App\Models\Translation::getTranslation('select_client') }}</option>
                                 @foreach($clients as $client)
                                     <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
                                         {{ $client->name }} @if($client->company_name)({{ $client->company_name }})@endif
@@ -98,9 +98,12 @@
                                 @endforeach
                             </select>
                             
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#clientModal">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
                         @error('client_id')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                         @enderror
                     </div>
                 </div>
@@ -110,10 +113,10 @@
         <div class="row mt-3">
             <div class="col-12">
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea name="description" id="description" rows="3" class="form-control @error('description') is-invalid @enderror" required>{{ old('description') }}</textarea>
+                    <label for="description">{{ \App\Models\Translation::getTranslation('project_description') }}</label>
+                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description') }}</textarea>
                     @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
                 </div>
             </div>
@@ -122,15 +125,16 @@
         <div class="row mt-3">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="initial_files">Upload Initial Files (Client Approval Phase)</label>
+                    <label for="initial_files">{{ \App\Models\Translation::getTranslation('upload_initial_files') }}</label>
                     <div id="initialDropArea" class="file-drop-area">
                         <span class="file-message">Drag & Drop files here or click to browse</span>
                         <input type="file" name="initial_files[]" class="file-input @error('initial_files') is-invalid @enderror" multiple>
                     </div>
                     @error('initial_files')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
-                    <ul id="initialFileList" class="file-list mt-2"></ul> </div>
+                    <ul id="initialFileList" class="file-list mt-2"></ul> 
+                </div>
             </div>
         </div>
 

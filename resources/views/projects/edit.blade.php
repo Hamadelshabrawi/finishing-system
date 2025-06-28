@@ -1,51 +1,50 @@
 @extends('layouts.app')
 
-@section('title') Edit Project @endsection
-
+@section('title', \App\Models\Translation::getTranslation('edit_project'))
 
 @section('content')
 
 <style>
     .file-list {
-    list-style: none;
-    padding: 0;
-}
+        list-style: none;
+        padding: 0;
+    }
 
-.file-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
+    .file-list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
 
-.file-list a {
-    font-weight: bold;
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+    .file-list a {
+        font-weight: bold;
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 
-.file-list a:hover {
-    color: #0056b3;
-}
+    .file-list a:hover {
+        color: #0056b3;
+    }
 
-.file-list span {
-    font-size: 14px;
-    color: #6c757d;
-    margin-left: 15px;
-}
+    .file-list span {
+        font-size: 14px;
+        color: #6c757d;
+        margin-left: 15px;
+    }
 
-.file-list input[type="checkbox"] {
-    transform: scale(1.2);
-    cursor: pointer;
-}
+    .file-list input[type="checkbox"] {
+        transform: scale(1.2);
+        cursor: pointer;
+    }
 </style>
 @include('projects.partials.style')
 
-    <h1>Edit Project</h1>
+    <h1>{{ \App\Models\Translation::getTranslation('edit_project') }}</h1>
 
     <form id="projectEditForm" action="{{ route('projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -55,18 +54,18 @@
         <div class="card mb-4">
             <!-- Project Contact -->
             <div class="col-12">
-                <h5 class="mb-3">Project Contact</h5>
+                <h5 class="mb-3">{{ \App\Models\Translation::getTranslation('project_contacts_card') }}</h5>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Name *</label>
+                            <label>{{ \App\Models\Translation::getTranslation('contact_name') }} *</label>
                             <input type="text" name="contacts[0][name]" class="form-control" required value="{{ $project->contacts->first()?->name ?? '' }}">
                         </div>
                     </div>
                     <input type="hidden" name="contacts[0][id]" value="{{ $project->contacts->first()?->id ?? '' }}">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Position *</label>
+                            <label>{{ \App\Models\Translation::getTranslation('contact_position') }} *</label>
                             <input type="text" name="contacts[0][position]" class="form-control" required value="{{ $project->contacts->first()?->position ?? '' }}">
                         </div>
                     </div>
@@ -74,13 +73,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Phone Number</label>
+                            <label>{{ \App\Models\Translation::getTranslation('contact_phone') }}</label>
                             <input type="tel" name="contacts[0][phone_number]" class="form-control" value="{{ $project->contacts->first()?->phone_number ?? '' }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>{{ \App\Models\Translation::getTranslation('contact_email') }}</label>
                             <input type="email" name="contacts[0][email]" class="form-control" value="{{ $project->contacts->first()?->email ?? '' }}">
                         </div>
                     </div>
@@ -91,10 +90,10 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="date">Start Date</label>
+                    <label for="date">{{ \App\Models\Translation::getTranslation('start_date') }}</label>
                     <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date', $project->date ? $project->date->format('Y-m-d') : '') }}" required>
                     @error('date')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'start date']) }}</div>
                     @enderror
                 </div>
             </div>

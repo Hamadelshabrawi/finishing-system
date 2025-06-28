@@ -12,11 +12,11 @@
 
         <ul class="navbar-nav flex-fill w-100 mb-2">
 
-            @can('Dashboard')
+            @can('dashboard')
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/') }}">
                 <i class="fa-solid fa-gauge"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Dashboard') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.dashboard') }}</span>
                 </a>
             </li>
             @endcan
@@ -25,22 +25,31 @@
             <li class="nav-item dropdown">
                 <a href="#" data-toggle="dropdown" class="dropdown-toggle nav-link">
                     <i class="fa-brands fa-critical-role"></i>
-                    <span class="ml-3 item-text">{{ __('sidebar.Manage Roles') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.manage_roles') }}</span>
                 </a>
                 <ul class="dropdown-menu">
                     @can('Create Role')
                     <li class="nav-item">
                         <a class="dropdown-item" href="{{ route('roles.create') }}">
-                            <i class="fas fa-plus-circle"></i> {{ __('Create New Role') }}
+                            <i class="fas fa-plus-circle"></i> {{ __('messages.sidebar.create_role') }}
                         </a>
                     </li>
                     @endcan
                     <li class="nav-item">
                         <a class="dropdown-item" href="{{ route('roles.index') }}">
-                            <i class="fas fa-list"></i> {{ __('View Roles') }}
+                            <i class="fas fa-list"></i> {{ __('messages.sidebar.view_roles') }}
                         </a>
                     </li>
                 </ul>
+
+                @can('Manage Translations')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('translations.index') }}">
+                        <i class="fas fa-language"></i>
+                        <p>{{ __('messages.translations.title') }}</p>
+                    </a>
+                </li>
+                @endcan
             </li>
             @endcan
 
@@ -48,7 +57,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('permissions.index') }}">
                 <i class="fa-solid fa-universal-access"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Manage Permissions') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.manage_permissions') }}</span>
                 </a>
             </li>
             @endcan
@@ -57,7 +66,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('users.index') }}">
                     <i class="fe fe-users"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Users') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.users') }}</span>
                 </a>
             </li>
             @endcan
@@ -66,7 +75,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('projects.index') }}">
                     <i class="fas fa-project-diagram"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Projects') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.projects') }}</span>
                 </a>
             </li>
             @endcan
@@ -75,7 +84,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('clients.index') }}">
                     <i class="fas fa-users"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Clients') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.clients') }}</span>
                 </a>
             </li>
             @endcan
@@ -84,7 +93,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('my-tasks') }}">
                     <i class="fa-solid fa-list-check"></i>
-                    <span class="ml-3 item-text">@if(Auth::user()->user_type == 'Admin') {{ __('en::en.All Tasks') }} @else {{ __('en::en.My Tasks') }} @endif</span>
+                    <span class="ml-3 item-text">@if(Auth::user()->user_type == 'Admin') {{ __('messages.sidebar.all_tasks') }} @else {{ __('messages.sidebar.my_tasks') }} @endif</span>
                 </a>
             </li>
             @endcan
@@ -93,7 +102,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('items.index') }}">
                     <i class="fas fa-cube"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Items') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.items') }}</span>
                 </a>
             </li>
             @endcan
@@ -102,23 +111,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('suppliers.index') }}">
                     <i class="fa-solid fa-truck"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Suppliers') }}</span>
+                    <span class="ml-3 item-text">{{ __('messages.sidebar.suppliers') }}</span>
                 </a>
             </li>
             @endcan
 
-            @can('Send Email')
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('email.form') }}">
-                    <i class="fa-regular fa-envelope"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Send Email') }}</span>
-                </a>
-            </li>
-            @endcan
-
-
-
-            @can('Send Email')
+            @can('send_email')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('email.form') }}">
                     <i class="fa-regular fa-envelope"></i>

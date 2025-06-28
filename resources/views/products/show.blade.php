@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Product Details')
+@section('title', __('products.product_details.title'))
 
 @section('content')
     @can('View Product Details')
@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header">Product Details</div>
+                                <div class="card-header">{{ __('products.product_details.title') }}</div>
                                 <div class="card-body">
                                     <p><strong>Project:</strong> {{ $product->project->project_name ?? 'N/A' }}</p>
                                     <p><strong>Product:</strong> {{ $product->name }}</p>
@@ -27,7 +27,7 @@
 
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header">Actions</div>
+                                <div class="card-header">{{ __('products.actions.actions') }}</div>
                                 <div class="card-body">
                                     @can('Edit Product')
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
@@ -53,7 +53,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Items</h5>
+                                    <h5 class="mb-0">{{ __('products.sections.items') }}</h5>
                                     @can('Edit Item')
                                     <a href="{{ route('product.items.index', $product->id) }}" class="btn btn-primary ">
                                         <i class="fas fa-edit me-2"></i>Manage Items
@@ -69,7 +69,7 @@
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Quantity</th>
-                                                    <th>Actions</th>
+                                                    <th>{{ __('products.items.actions') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -153,7 +153,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Product Files</h5>
+                                    <h5 class="mb-0">{{ __('products.sections.product_files') }}</h5>
                                     @can('Create Product')
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFilesModal">
                                         <i class="fas fa-upload me-2"></i>Upload Files
