@@ -3,6 +3,10 @@
 @section('title') Product Outsources @endsection
 
 @section('content')
+    @php
+        $suppliers = \App\Models\Supplier::all();
+    @endphp
+
     <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">Product Outsources for "{{ $product->name }}"</h1>
@@ -31,10 +35,22 @@
                                 <h5 class="modal-title" id="addOutsourceModalLabel">Add Outsource</h5>
                                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form action="{{ route('product.outsources.store', ['product' => $product->id]) }}" method="POST">
+                            <form action="{{ route('product.outsources.store', $product->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" value="{{ $product->project->id }}" name="project_id" required>
                                 <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="supplier_id" class="form-label">Supplier</label>
+                                        <select class="form-control @error('supplier_id') is-invalid @enderror" id="supplier_id" name="supplier_id" required>
+                                            <option value="">Select Supplier</option>
+                                            @foreach($suppliers as $supplier)
+                                                <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('supplier_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="mb-3">
                                         <label for="outsource_name" class="form-label">Outsource Name</label>
                                         <input type="text" class="form-control @error('outsource_name') is-invalid @enderror" id="outsource_name" name="outsource_name" required>
@@ -79,6 +95,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>Supplier</th>
                                 <th>Name</th>
                                 <th>Cost</th>
                                 <th>Quantity</th>
@@ -89,6 +106,7 @@
                         <tbody>
                             @foreach($product->outsources as $outsource)
                                 <tr>
+                                    <td>{{ $outsource->supplier->name }}</td>
                                     <td>{{ $outsource->outsource_name }}</td>
                                     <td>{{ $outsource->cost }}</td>
                                     <td>{{ $outsource->quantity }}</td>
@@ -101,6 +119,7 @@
                                             data-cost="{{ $outsource->cost }}"
                                             data-quantity="{{ $outsource->quantity }}"
                                             data-boarder-note="{{ $outsource->boarder_note }}"
+                                            data-supplier-id="{{ $outsource->supplier_id }}"
                                             title="Edit Outsource">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
@@ -129,11 +148,21 @@
                     <h5 class="modal-title" id="editOutsourceModalLabel">Edit Outsource</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editOutsourceForm" method="POST">
+                <form id="editOutsourceForm" action="{{ route('product.outsources.update', ['product' => $product->id, 'outsource' => '__outsource_id__']) }}" method="POST">
                     @csrf
-                    @method('POST') {{-- Use PUT method for update --}}
+                    @method('PUT')
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="modal-body">
                         <input type="hidden" name="outsource_id" id="edit_outsource_id">
+                        <div class="mb-3">
+                            <label for="edit_supplier_id" class="form-label">Supplier</label>
+                            <select class="form-control" id="edit_supplier_id" name="supplier_id" required>
+                                <option value="">Select Supplier</option>
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="edit_outsource_name" class="form-label">Outsource Name</label>
                             <input type="text" class="form-control" id="edit_outsource_name" name="outsource_name" required>
@@ -186,27 +215,28 @@
 @push('scripts')
 <script>
     // Handle edit outsource button click
-    $(document).on('click', '.edit-outsource-btn', function() {
-        var outsourceId = $(this).data('outsource-id');
-        var outsourceName = $(this).data('outsource-name');
-        var cost = $(this).data('cost');
-        var quantity = $(this).data('quantity');
-        var borderNote = $(this).data('boarder-note');
-        var productId = {{ $product->id }};
+    $('.edit-outsource-btn').on('click', function() {
+        const outsourceId = $(this).data('outsource-id');
+        const outsourceName = $(this).data('outsource-name');
+        const cost = $(this).data('cost');
+        const quantity = $(this).data('quantity');
+        const boarderNote = $(this).data('boarder-note');
+        const supplierId = $(this).data('supplier-id');
 
-        // Update form action URL
-        $('#editOutsourceForm').attr('action', `/products/${productId}/outsources/${outsourceId}`);
-
-        // Populate form fields
         $('#edit_outsource_id').val(outsourceId);
         $('#edit_outsource_name').val(outsourceName);
         $('#edit_cost').val(cost);
         $('#edit_quantity').val(quantity);
-        $('#edit_boarder_note').val(borderNote);
+        $('#edit_boarder_note').val(boarderNote);
+        $('#edit_supplier_id').val(supplierId);
 
+        // Update form action URL
+        $('#editOutsourceForm').attr('action', `{{ route('product.outsources.update', ['product' => $product->id, 'outsource' => '__outsource_id__']) }}`.replace('__outsource_id__', outsourceId));
+        
         // Show the modal
         $('#editOutsourceModal').modal('show');
     });
+
 
     // Handle delete outsource button click
     $(document).on('click', '.delete-outsource-btn', function() {

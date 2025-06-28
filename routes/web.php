@@ -157,12 +157,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('suppliers/{supplier}/outsources', [SupplierController::class, 'supplierOutsources'])->name('suppliers.outsources');
 
         // outsources routes
-        Route::get('outsources/{product}', [OutsourceController::class, 'index'])->name('product.outsources.index');
-        Route::post('outsources', [OutsourceController::class, 'store'])->name('product.outsources.store');
-        Route::post('outsources/{outsource}', [OutsourceController::class, 'update'])->name('product.outsources.update');
-        Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('product.outsources.destroy');
-        Route::get('outsources/create', [OutsourceController::class, 'create'])->name('product.outsources.create');
-        Route::get('outsources/{outsource}/edit', [OutsourceController::class, 'edit'])->name('product.outsources.edit');
+        Route::prefix('products/{product}')->group(function () {
+            Route::get('outsources', [OutsourceController::class, 'index'])->name('product.outsources.index');
+            Route::post('outsources', [OutsourceController::class, 'store'])->name('product.outsources.store');
+            Route::put('outsources/{outsource}', [OutsourceController::class, 'update'])->name('product.outsources.update');
+            Route::delete('outsources/{outsource}', [OutsourceController::class, 'destroy'])->name('product.outsources.destroy');
+            Route::get('outsources/create', [OutsourceController::class, 'create'])->name('product.outsources.create');
+            Route::get('outsources/{outsource}/edit', [OutsourceController::class, 'edit'])->name('product.outsources.edit');
+        });
 
         Route::get('purchases/create', [ItemPurchaseController::class, 'create'])->name('item.purchases.create');
         Route::post('purchases', [ItemPurchaseController::class, 'store'])->name('item.purchases.store');

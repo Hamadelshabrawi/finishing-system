@@ -43,16 +43,17 @@ class OutsourceController extends Controller
             'quantity' => 'required|numeric|min:1',
             'boarder_note' => 'nullable|string',
             'supplier_id' => 'required|exists:suppliers,id',
+            'project_id' => 'required|exists:projects,id',
         ]);
 
         Outsource::create([
             'product_id' => $productId,
-            'project_id' => $request->project_id,
-            'supplier_id' => $validated['supplier_id'],
+            'project_id' => $validated['project_id'],
             'outsource_name' => $validated['outsource_name'],
-            'boarder_note' => $validated['boarder_note'] ?? null,
             'cost' => $validated['cost'],
             'quantity' => $validated['quantity'],
+            'boarder_note' => $validated['boarder_note'],
+            'supplier_id' => $validated['supplier_id'],
         ]);
 
         return redirect()->back()->with('success', 'Outsource added successfully!');
@@ -72,10 +73,23 @@ class OutsourceController extends Controller
         $outsource = Outsource::findOrFail($outsourceId);
         
         if ($outsource->product_id != $productId) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized action'], 403);
+            }
             return redirect()->back()->with('error', 'Unauthorized action');
         }
 
-        $outsource->update($validated);
+        $outsource->update([
+            'outsource_name' => $validated['outsource_name'],
+            'cost' => $validated['cost'],
+            'quantity' => $validated['quantity'],
+            'boarder_note' => $validated['boarder_note'],
+            'supplier_id' => $validated['supplier_id'],
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Outsource updated successfully']);
+        }
 
         return redirect()->back()->with('success', 'Outsource updated successfully!');
     }
