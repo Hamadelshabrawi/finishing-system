@@ -15,7 +15,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="date">{{ \App\Models\Translation::getTranslation('start_date') }}</label>
-                    <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" required value="{{ old('date') }}">
+                    <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date') }}">
                     @error('date')
                         <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'start date']) }}</div>
                     @enderror
@@ -25,18 +25,9 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="project_name">{{ \App\Models\Translation::getTranslation('project_name') }}</label>
-                    <input type="text" name="project_name" id="project_name" class="form-control @error('project_name') is-invalid @enderror" required value="{{ old('project_name') }}">
+                    <input type="text" name="project_name" id="project_name" class="form-control @error('project_name') is-invalid @enderror" value="{{ old('project_name') }}" required>
                     @error('project_name')
                         <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
-                    @enderror
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="contact_value">{{ \App\Models\Translation::getTranslation('contact_value') }}</label>
-                    <input type="number" name="contact_value" id="contact_value" class="form-control @error('contact_value') is-invalid @enderror" required min="1" value="{{ old('contact_value') }}">
-                    @error('contact_value')
-                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('min_value', ['0' => '1']) }}</div>
                     @enderror
                 </div>
             </div>
@@ -44,7 +35,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="execution_period">{{ \App\Models\Translation::getTranslation('execution_period') }}</label>
-                    <input type="number" name="execution_period" id="execution_period" class="form-control @error('execution_period') is-invalid @enderror" required min="1" value="{{ old('execution_period') }}">
+                    <input type="number" name="execution_period" id="execution_period" class="form-control @error('execution_period') is-invalid @enderror" min="1" value="{{ old('execution_period') }}">
                     @error('execution_period')
                         <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('min_value', ['0' => '1']) }}</div>
                     @enderror
@@ -54,7 +45,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="delivery_date">{{ \App\Models\Translation::getTranslation('delivery_date') }}</label>
-                    <input type="date" name="delivery_date" id="delivery_date" class="form-control @error('delivery_date') is-invalid @enderror" required value="{{ old('delivery_date') }}">
+                    <input type="date" name="delivery_date" id="delivery_date" class="form-control @error('delivery_date') is-invalid @enderror" value="{{ old('delivery_date') }}">
                     @error('delivery_date')
                         <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'delivery date']) }}</div>
                     @enderror
@@ -64,7 +55,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="technical_approval">{{ \App\Models\Translation::getTranslation('technical_approval') }}</label>
-                    <select name="technical_approval" class="form-control @error('technical_approval') is-invalid @enderror" required>
+                    <select name="technical_approval" class="form-control @error('technical_approval') is-invalid @enderror" >
                         <option value="pending" {{ old('technical_approval', 'pending') == 'pending' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('pending_approval') }}</option>
                         <option value="approved" {{ old('technical_approval') == 'approved' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('approved') }}</option>
                         <option value="need_modify" {{ old('technical_approval') == 'need_modify' ? 'selected' : '' }}>{{ \App\Models\Translation::getTranslation('need_modify') }}</option>
@@ -78,7 +69,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="delivery_location">{{ \App\Models\Translation::getTranslation('delivery_location') }}</label>
-                    <input type="text" name="delivery_location" id="delivery_location" class="form-control @error('delivery_location') is-invalid @enderror" required value="{{ old('delivery_location') }}">
+                    <input type="text" name="delivery_location" id="delivery_location" class="form-control @error('delivery_location') is-invalid @enderror" value="{{ old('delivery_location') }}">
                     @error('delivery_location')
                         <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
                     @enderror
@@ -89,7 +80,7 @@
                     <div class="form-group">
                         <label for="client_id">{{ \App\Models\Translation::getTranslation('client') }}</label>
                         <div class="input-group">
-                            <select name="client_id" id="client_id" class="form-control @error('client_id') is-invalid @enderror" required>
+                            <select name="client_id" id="client_id" class="form-control @error('client_id') is-invalid @enderror">
                                 <option value="">{{ \App\Models\Translation::getTranslation('select_client') }}</option>
                                 @foreach($clients as $client)
                                     <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
@@ -98,9 +89,9 @@
                                 @endforeach
                             </select>
                             
-                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#clientModal">
+                            <a type="button" class="btn btn-outline-secondary" href="{{ route('clients.create') }}">
                                 <i class="fas fa-plus"></i>
-                            </button>
+                            </a>
                         </div>
                         @error('client_id')
                             <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('required_field') }}</div>
@@ -230,13 +221,13 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Name *</label>
-                                        <input type="text" name="contacts[0][name]" class="form-control" required>
+                                        <input type="text" name="contacts[0][name]" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Position *</label>
-                                        <input type="text" name="contacts[0][position]" class="form-control" required>
+                                        <input type="text" name="contacts[0][position]" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-3">

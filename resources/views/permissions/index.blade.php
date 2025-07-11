@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Permissions')
+@section('title', __('permissions.title'))
 
 @section('content')
     <div class="card">
         <div class="card-header bg-dark text-center">
-            <h3 class="mb-0 fw-bold text-white">Manage Permissions</h3>
+            <h3 class="mb-0 fw-bold text-white">{{ __('permissions.manage.title') }}</h3>
         </div>
 
         <div class="card-body">
@@ -21,7 +21,7 @@
                     </div>
                     <div>
                         <a href="{{ route('permissions.create') }}" class="btn btn-success shadow-sm rounded-pill">
-                            <i class="fas fa-plus-circle me-2"></i> Create New Permission
+                            <i class="fas fa-plus-circle me-2"></i> {{ __('permissions.create.new') }}
                         </a>
                     </div>
                 </div>
@@ -40,8 +40,8 @@
                 <table class="table table-striped align-middle shadow-sm" id="permissionsTable">
                     <thead class="table-dark text-center" style="position: sticky; top: 0; z-index: 1;">
                         <tr>
-                            <th class="py-3">Permission Name</th>
-                            <th class="py-3">Actions</th>
+                            <th class="py-3">{{ __('permissions.table.name') }} </th>
+                            <th class="py-3">{{ __('permissions.table.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
                                 <td class="text-center">
                                     @can('Edit Permission')
                                         <a href="{{ route('permissions.edit', $permission) }}" class="btn btn-warning btn-sm rounded-pill shadow-sm">
-                                            <i class="fas fa-edit"></i> Edit
+                                            <i class="fas fa-edit"></i> {{ __('permissions.edit.button') }}
                                         </a>
                                     @endcan
                                     @can('Delete Permission')
@@ -59,7 +59,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm rounded-pill shadow-sm">
-                                                <i class="fas fa-trash-alt"></i> Delete
+                                                <i class="fas fa-trash-alt"></i> {{ __('permissions.delete.button') }}
                                             </button>
                                         </form>
                                     @endcan

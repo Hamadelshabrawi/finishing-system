@@ -52,6 +52,15 @@ public function run()
         'create outsources',
         'edit outsources',
         'delete outsources',
+
+        // Items Details permissions
+        'Items Details',
+        'Create Item',
+        'Edit Item',
+        'Delete Item',
+
+        // Email related permissions
+        'Send Email',
         
         // System related permissions
         'view system logs',
@@ -111,6 +120,12 @@ public function run()
         'view outsources',
         'create outsources',
         'edit outsources',
+        'Products List',
+        'Items Details',
+        'Create Item',
+        'Edit Item',
+        'Delete Item',
+        'Send Email',
         'delete outsources'
     ]);
 

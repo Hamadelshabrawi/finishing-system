@@ -36,7 +36,7 @@ class AddPerformanceIndexes extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropIndex(['client_id']);
+            $table->dropIndex(['client_id'])->nullable();
             $table->dropIndex(['created_by']);
             $table->dropIndex(['delivery_date']);
             $table->dropIndex(['technical_approval']);

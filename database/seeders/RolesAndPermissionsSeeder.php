@@ -22,8 +22,21 @@ class RolesAndPermissionsSeeder extends Seeder
         // Email Management
         Permission::firstOrCreate(['name' => 'send_email', 'guard_name' => 'web']);
 
+        // Materials Management
+        Permission::firstOrCreate(['name' => 'Materials List', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Create Material', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Edit Material', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Delete Material', 'guard_name' => 'web']);
+
+        // Materials Management
+        Permission::firstOrCreate(['name' => 'Final Finish List', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Create Final Finish', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Edit Final Finish', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Delete Final Finish', 'guard_name' => 'web']);
+
         // Items Management
         Permission::firstOrCreate(['name' => 'Items List', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Items Details', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Create Item', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Edit Item', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Delete Item', 'guard_name' => 'web']);
@@ -39,6 +52,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'Edit Permission', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Delete Permission', 'guard_name' => 'web']);
 
+        // Email Management
+        Permission::firstOrCreate(['name' => 'Send Email', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'view system logs', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'manage users', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'manage roles', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'manage permissions', 'guard_name' => 'web']);
+
         // Project Management
         Permission::firstOrCreate(['name' => 'Projects List', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Create Project', 'guard_name' => 'web']);
@@ -51,6 +71,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'Upload Project File', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'View Project Tasks', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'View Project Products', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Delete Project File', 'guard_name' => 'web']);
 
         // Product Management
         Permission::firstOrCreate(['name' => 'Products List', 'guard_name' => 'web']);
@@ -119,6 +140,14 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'Create Client', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Edit Client', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Delete Client', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Search Clients', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'View Client Details', 'guard_name' => 'web']);
+
+        // Outsources Management
+        Permission::firstOrCreate(['name' => 'view outsources', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'create outsources', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'edit outsources', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'Delete Outsources', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'Search Clients', 'guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'View Client Details', 'guard_name' => 'web']);
 

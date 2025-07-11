@@ -41,6 +41,8 @@ class ProjectController extends Controller
                 ->select([
                     'projects.id',
                     'projects.date',
+                    'projects.contact_value',
+                    'projects.client_id',
                     'projects.project_name',
                     'projects.technical_approval',
                     'projects.delivery_date',
@@ -49,10 +51,12 @@ class ProjectController extends Controller
                     'projects.updated_at'
                 ])
                 ->latest();
-    
             return DataTables::eloquent($projects)
                 ->addColumn('client_name', function($project) {
                     return optional($project->client)->name ?? 'N/A';
+                })
+                ->addColumn('contact_value', function($project) {
+                    return optional($project)->contact_value ?? 'N/A';
                 })
                 ->addColumn('product_count', function($project) {
                     return $project->products->count();
@@ -82,9 +86,9 @@ class ProjectController extends Controller
                                     class="btn btn-warning btn-sm" 
                                     title="Edit">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-</svg>
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
                                 </a> ';
                     }
     
@@ -93,36 +97,35 @@ class ProjectController extends Controller
                                     class="btn btn-secondary btn-sm" 
                                     title="Export">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-file-arrow-down-fill" viewBox="0 0 16 16">
-  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5"/>
-</svg>
+                                        <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5"/>
+                                    </svg>
                                 </a> ';
                     }
     
                     if (auth()->user()->can('Send Project Email')) {
-                        $actions .= '<a href="'.route('projects.email', $project->id).'" 
+                        $actions .= '<a href="'.route('email.form', ['project_id' => $project->id]).'" 
                                     class="btn btn-primary btn-sm" 
                                     title="Send Email">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-envelope-at" viewBox="0 0 16 16">
-  <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2zm3.708 6.208L1 11.105V5.383zM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2z"/>
-  <path d="M14.247 14.269c1.01 0 1.587-.857 1.587-2.025v-.21C15.834 10.43 14.64 9 12.52 9h-.035C10.42 9 9 10.36 9 12.432v.214C9 14.82 10.438 16 12.358 16h.044c.594 0 1.018-.074 1.237-.175v-.73c-.245.11-.673.18-1.18.18h-.044c-1.334 0-2.571-.788-2.571-2.655v-.157c0-1.657 1.058-2.724 2.64-2.724h.04c1.535 0 2.484 1.05 2.484 2.326v.118c0 .975-.324 1.39-.639 1.39-.232 0-.41-.148-.41-.42v-2.19h-.906v.569h-.03c-.084-.298-.368-.63-.954-.63-.778 0-1.259.555-1.259 1.4v.528c0 .892.49 1.434 1.26 1.434.471 0 .896-.227 1.014-.643h.043c.118.42.617.648 1.12.648m-2.453-1.588v-.227c0-.546.227-.791.573-.791.297 0 .572.192.572.708v.367c0 .573-.253.744-.564.744-.354 0-.581-.215-.581-.8Z"/>
-</svg>
-                                </a> ';
-                    }
-    
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-envelope-at" viewBox="0 0 16 16">
+                                <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z"/>
+                                <path d="M14.247 14.269c1.01 0 1.587-.857 1.587-2.025v-.21C15.834 10.43 14.64 9 12.52 9h-.035C10.42 9 9 10.36 9 12.432v.214C9 14.82 10.438 16 12.358 16h.044c.594 0 1.018-.074 1.238-.175v-.73c-.245.11-.673.18-1.202.18h-.044c-1.334 0-2.571-.788-2.571-2.655v-.157c0-1.657 1.058-2.724 2.64-2.724h.04c1.535 0 2.484 1.05 2.484 2.326v.118c0 .975-.324 1.39-.639 1.39-.232 0-.41-.148-.41-.42v-2.19h-.906v.569h-.03c-.084-.298-.368-.63-.954-.63-.778 0-1.259.555-1.259 1.4v.528c0 .892.49 1.434 1.26 1.434.471 0 .896-.227 1.014-.643h.043c.118.42.617.648 1.12.648Zm-2.453-1.588v-.227c0-.546.227-.791.573-.791.297 0 .572.192.572.708v.367c0 .573-.253.744-.564.744-.354 0-.581-.215-.581-.8Z"/>
+                            </svg>
+                        </a>';
+                    }    
                     if (auth()->user()->can('Delete Project')) {
                         $actions .= '<form action="'.route('projects.destroy', $project->id).'" 
-                                    method="POST" class="d-inline">
-                                    '.csrf_field().'
-                                    '.method_field('DELETE').'
-                                    <button type="submit" 
-                                        class="btn btn-danger btn-sm delete-btn" 
-                                        title="Delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-</svg>
-                                    </button>
-                                </form>';
+                            method="POST" class="d-inline">
+                            '.csrf_field().'
+                            '.method_field('DELETE').'
+                            <button type="submit" 
+                                class="btn btn-danger btn-sm delete-btn" 
+                                title="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                            </button>
+                        </form>';
                     }
     
                     $actions .= '</div>';
@@ -193,7 +196,7 @@ class ProjectController extends Controller
             'to' => 'required|email',
             'subject' => 'required',
             'message' => 'required',
-            'attachments.*' => 'file|max:10240', // 10MB max per file
+            'attachments.*' => 'file|max:10240',
         ]);
     
         // Process attachments
@@ -245,29 +248,27 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'date' => 'required|date',
+            'date' => 'nullable|date',
             'project_name' => 'required|string|max:255',
-            'contact_value' => 'required|string|max:255',
-            'execution_period' => 'required|integer|min:1',
-            'delivery_date' => 'required|date|after_or_equal:date',
-            'delivery_location' => 'required|string|max:255',
-            'technical_approval' => 'required|in:pending,approved,need_modify,dismissed',
-            'description' => 'required|string',
-            'client_id' => 'required|exists:clients,id',
+            'execution_period' => 'nullable|integer|min:1',
+            'delivery_date' => 'nullable|date|after_or_equal:date',
+            'delivery_location' => 'nullable|string|max:255',
+            'technical_approval' => 'nullable|in:pending,approved,need_modify,dismissed',
+            'description' => 'nullable|string',
+            'client_id' => 'nullable|exists:clients,id',
             'initial_files.*' => 'nullable',
-            'contacts.*.name' => 'required_with:contacts',
-            'contacts.*.position' => 'required_with:contacts',
+            'contacts.*.name' => 'nullable',
+            'contacts.*.position' => 'nullable',
             'contacts.*.phone_number' => 'nullable',
             'contacts.*.email' => 'nullable|email',
             'contacts.*.department' => 'nullable|string|max:255',
-        ], [
-            'client_id.required' => 'Please select a client for this project',
-            'client_id.exists' => 'Selected client does not exist',
-            'contacts.*.name.required_with' => 'Name is required for each contact',
-            'contacts.*.position.required_with' => 'Position is required for each contact'
         ]);
 
         try {
+            // $generatedContractValue = 'Pro-' . strtoupper(uniqid());
+            $generatedContractValue = 'Pro-' . now()->format('YmdHis');
+            $validated['contact_value'] = $generatedContractValue;
+
             // Create project
             $project = new Project();
             $project->created_by = Auth::id();
@@ -343,7 +344,7 @@ class ProjectController extends Controller
 
 public function show(Project $project)
 {
-    $project = Project::with(['contacts'])->findOrFail($project->id);
+    $project = Project::with(['contacts','products.items','products.outsources','products.productNote'])->findOrFail($project->id);
     $items = Item::all();
     return view('projects.show', compact('project', 'items'));
 }
@@ -359,14 +360,11 @@ public function edit($id)
 public function update(Request $request, $id)
 {
     $request->validate([
-        'contacts.*.name' => 'required_with:contacts',
-        'contacts.*.position' => 'required_with:contacts',
+        'contacts.*.name' => 'nullable',
+        'contacts.*.position' => 'nullable',
         'contacts.*.phone_number' => 'nullable',
         'contacts.*.email' => 'nullable|email',
         'contacts.*.department' => 'nullable|string|max:255',
-    ], [
-        'contacts.*.name.required_with' => 'Name is required for each contact',
-        'contacts.*.position.required_with' => 'Position is required for each contact',
     ]);
 
     try {
@@ -408,17 +406,17 @@ public function update(Request $request, $id)
         ]);
 
         $validated = $request->validate([
-            'project_name' => 'required|string|max:255',
-            'date' => 'required|date',
-            'contact_value' => 'required|numeric|min:0',
-            'execution_period' => 'required|numeric|min:0',
-            'delivery_date' => 'required|date|after_or_equal:date',
-            'technical_approval' => 'required|string|in:need_modify,dismissed,approved,pending',
-            'delivery_location' => 'required|string|max:255',
-            'client_id' => 'required|exists:clients,id',
+            'project_name' => 'nullable|string|max:255',
+            'date' => 'nullable|date',
+            'contact_value' => 'nullable|numeric|min:0',
+            'execution_period' => 'nullable|numeric|min:0',
+            'delivery_date' => 'nullable|date|after_or_equal:date',
+            'technical_approval' => 'nullable|string|in:need_modify,dismissed,approved,pending',
+            'delivery_location' => 'nullable|string|max:255',
+            'client_id' => 'nullable|exists:clients,id',
             'description' => 'nullable|string',
-            'contacts.*.name' => 'required_with:contacts',
-            'contacts.*.position' => 'required_with:contacts',
+            'contacts.*.name' => 'nullable:contacts',
+            'contacts.*.position' => 'nullable:contacts',
             'contacts.*.phone_number' => 'nullable',
             'contacts.*.email' => 'nullable|email',
             'contacts.*.department' => 'nullable|string|max:255'

@@ -120,7 +120,7 @@ Route::middleware(['auth'])->group(function () {
                 // product notes routes
                 Route::get('note', [ProductNoteController::class, 'show'])->name('product.note.show');
                 Route::post('note', [ProductNoteController::class, 'store'])->name('product.note.store');
-                Route::put('note', [ProductNoteController::class, 'update'])->name('product.note.update');
+                Route::put('notes/{note}', [ProductNoteController::class, 'update'])->name('products.notes.update');
                 Route::delete('note', [ProductNoteController::class, 'destroy'])->name('product.note.destroy');
 
                 // product files routes
@@ -196,8 +196,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('purchases/{purchase}', [ItemPurchaseController::class, 'destroy'])->name('item.purchases.destroy');
         Route::post('purchases/consume', [ItemPurchaseController::class, 'consume'])->name('item.purchases.consume');
 
-        // products routes
-        Route::resource('products', ProductController::class);
         Route::prefix('products/{product}')->group(function () {
             Route::get('items/consume', [ProductItemConsumptionController::class, 'create'])->name('products.items.consume.create');
             Route::post('items/consume', [ProductItemConsumptionController::class, 'store'])->name('products.items.consume.store');
@@ -211,6 +209,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/email/send', [EmailController::class, 'send'])->name('email.send');
         Route::post('/email/project', [ProjectController::class, 'sendProjectEmail'])->name('projects.email');
         Route::get('/logs', [EmailController::class, 'logs'])->name('email.logs');
+        Route::get('/project/{project}/email', [EmailController::class, 'create'])->name('project.email');
+
     });
 
 Route::prefix('admin')->middleware('auth')->group(function () {

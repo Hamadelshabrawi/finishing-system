@@ -4,14 +4,14 @@
 
 @section('content')
 <div class="container-fluid mt-3">
-    <div class="row mb-4 align-items-center"> {{-- Added align-items-center for vertical alignment --}}
+    <div class="row mb-4 align-items-center"> 
         <div class="col-md-6">
-            <h1 class="mb-0">{{ \App\Models\Translation::getTranslation('title') }}</h1> {{-- Removed bottom margin for better alignment --}}
+            <h1 class="mb-0">{{ \App\Models\Translation::getTranslation('title') }}</h1> 
         </div>
-        <div class="col-md-6 text-md-end mt-3 mt-md-0"> {{-- Adjusted for responsive text alignment and margin --}}
+        <div class="col-md-6 text-md-end mt-3 mt-md-0"> 
             @can('Create Project')
             <a href="{{ route('projects.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i> {{ \App\Models\Translation::getTranslation('create_project') }} {{-- Added me-2 for spacing --}}
+                <i class="fas fa-plus me-2"></i> {{ \App\Models\Translation::getTranslation('create_project') }}
             </a>
             @endcan
         </div>
@@ -20,10 +20,11 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover w-100" id="projects-table"> {{-- Added w-100 for full width --}}
+                <table class="table table-bordered table-hover w-100" id="projects-table">
                     <thead class="thead-light">
                         <tr>
                             <th>{{ \App\Models\Translation::getTranslation('date') }}</th>
+                            <th>{{ \App\Models\Translation::getTranslation('contact_value') }}</th>
                             <th>{{ \App\Models\Translation::getTranslation('project_name') }}</th>
                             @role('Admin')
                             <th>{{ \App\Models\Translation::getTranslation('client') }}</th>
@@ -107,6 +108,7 @@
     $(document).ready(function () {
         let columns = [
             { data: 'date', name: 'date', className: 'text-center' },
+            { data: 'contact_value', name: 'contact_value' },
             { data: 'project_name', name: 'project_name' },
             { data: 'product_count', name: 'products_count', className: 'text-center' },
             { data: 'technical_approval', name: 'technical_approval', className: 'text-center' },

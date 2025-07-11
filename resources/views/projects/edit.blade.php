@@ -44,7 +44,16 @@
 </style>
 @include('projects.partials.style')
 
-    <h1>{{ \App\Models\Translation::getTranslation('edit_project') }}</h1>
+    <div class="mb-4">
+        <h1 class="display-5 fw-bold text-primary">
+            {{ \App\Models\Translation::getTranslation('edit_project') }}
+        </h1>
+        @if($project->contact_value)
+            <h5 class="text-muted">
+                {{ __('Project Code:') }} {{ $project->contact_value }}
+            </h5>
+        @endif
+    </div>
 
     <form id="projectEditForm" action="{{ route('projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -52,146 +61,166 @@
 
         <!-- Project Contacts -->
         <div class="card mb-4">
-            <!-- Project Contact -->
-            <div class="col-12">
-                <h5 class="mb-3">{{ \App\Models\Translation::getTranslation('project_contacts_card') }}</h5>
-                <div class="row">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    {{ \App\Models\Translation::getTranslation('project_contacts_card') }}
+                </h5>
+
+                <div class="row mb-3">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>{{ \App\Models\Translation::getTranslation('contact_name') }} *</label>
-                            <input type="text" name="contacts[0][name]" class="form-control" required value="{{ $project->contacts->first()?->name ?? '' }}">
-                        </div>
+                        <label for="contact_name" class="form-label">
+                            {{ \App\Models\Translation::getTranslation('contact_name') }} *
+                        </label>
+                        <input
+                            type="text"
+                            id="contact_name"
+                            name="contacts[0][name]"
+                            class="form-control"
+                            value="{{ old('contacts.0.name', $project->contacts->first()?->name ?? '') }}"
+                        >
                     </div>
-                    <input type="hidden" name="contacts[0][id]" value="{{ $project->contacts->first()?->id ?? '' }}">
+
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>{{ \App\Models\Translation::getTranslation('contact_position') }} *</label>
-                            <input type="text" name="contacts[0][position]" class="form-control" required value="{{ $project->contacts->first()?->position ?? '' }}">
-                        </div>
+                        <label for="contact_position" class="form-label">
+                            {{ \App\Models\Translation::getTranslation('contact_position') }} *
+                        </label>
+                        <input
+                            type="text"
+                            id="contact_position"
+                            name="contacts[0][position]"
+                            class="form-control"
+                            value="{{ old('contacts.0.position', $project->contacts->first()?->position ?? '') }}"
+                        >
                     </div>
                 </div>
-                <div class="row">
+
+                <input type="hidden" name="contacts[0][id]" value="{{ $project->contacts->first()?->id ?? '' }}">
+
+                <div class="row mb-3">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>{{ \App\Models\Translation::getTranslation('contact_phone') }}</label>
-                            <input type="tel" name="contacts[0][phone_number]" class="form-control" value="{{ $project->contacts->first()?->phone_number ?? '' }}">
-                        </div>
+                        <label for="contact_phone" class="form-label">
+                            {{ \App\Models\Translation::getTranslation('contact_phone') }}
+                        </label>
+                        <input
+                            type="tel"
+                            id="contact_phone"
+                            name="contacts[0][phone_number]"
+                            class="form-control"
+                            value="{{ old('contacts.0.phone_number', $project->contacts->first()?->phone_number ?? '') }}"
+                        >
                     </div>
+
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>{{ \App\Models\Translation::getTranslation('contact_email') }}</label>
-                            <input type="email" name="contacts[0][email]" class="form-control" value="{{ $project->contacts->first()?->email ?? '' }}">
-                        </div>
+                        <label for="contact_email" class="form-label">
+                            {{ \App\Models\Translation::getTranslation('contact_email') }}
+                        </label>
+                        <input
+                            type="email"
+                            id="contact_email"
+                            name="contacts[0][email]"
+                            class="form-control"
+                            value="{{ old('contacts.0.email', $project->contacts->first()?->email ?? '') }}"
+                        >
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="date">{{ \App\Models\Translation::getTranslation('start_date') }}</label>
-                    <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date', $project->date ? $project->date->format('Y-m-d') : '') }}" required>
-                    @error('date')
-                        <div class="invalid-feedback">{{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'start date']) }}</div>
-                    @enderror
-                </div>
-            </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="date" class="form-label">
+                            {{ \App\Models\Translation::getTranslation('start_date') }}
+                        </label>
+                        <input type="date" name="date" id="date"
+                            class="form-control @error('date') is-invalid @enderror"
+                            value="{{ old('date', $project->date ? $project->date->format('Y-m-d') : '') }}">
+                        @error('date')
+                            <div class="invalid-feedback">
+                                {{ \App\Models\Translation::getTranslation('invalid_date', ['0' => 'start date']) }}
+                            </div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="project_name">Project Name</label>
-                    <input type="text" name="project_name" id="project_name" class="form-control @error('project_name') is-invalid @enderror" value="{{ old('project_name', $project->project_name) }}" required>
-                    @error('project_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="contact_value">Contract Value</label>
-                    <input type="text" name="contact_value" class="form-control @error('contact_value') is-invalid @enderror" value="{{ old('contact_value', $project->contact_value) }}" required min="1">
-                    @error('contact_value')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div class="col-md-3">
+                        <label for="project_name" class="form-label">Project Name</label>
+                        <input type="text" name="project_name" id="project_name"
+                            class="form-control @error('project_name') is-invalid @enderror"
+                            value="{{ old('project_name', $project->project_name) }}">
+                        @error('project_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="execution_period">Execution Period (days)</label>
-                    <input type="number" name="execution_period" id="execution_period" class="form-control @error('execution_period') is-invalid @enderror" value="{{ old('execution_period', $project->execution_period) }}" required min="1">
-                    @error('execution_period')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div class="col-md-3">
+                        <label for="execution_period" class="form-label">Execution Period (days)</label>
+                        <input type="number" name="execution_period" id="execution_period"
+                            class="form-control @error('execution_period') is-invalid @enderror"
+                            value="{{ old('execution_period', $project->execution_period) }}" min="1">
+                        @error('execution_period')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="delivery_date">Delivery Date</label>
-                    <input type="date" name="delivery_date" id="delivery_date" class="form-control @error('delivery_date') is-invalid @enderror" value="{{ old('delivery_date', $project->delivery_date ? $project->delivery_date->format('Y-m-d') : '') }}" required>
-                    @error('delivery_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div class="col-md-3">
+                        <label for="delivery_date" class="form-label">Delivery Date</label>
+                        <input type="date" name="delivery_date" id="delivery_date"
+                            class="form-control @error('delivery_date') is-invalid @enderror"
+                            value="{{ old('delivery_date', $project->delivery_date ? $project->delivery_date->format('Y-m-d') : '') }}">
+                        @error('delivery_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="technical_approval">Project Status</label>
-                    <select name="technical_approval" class="form-control @error('technical_approval') is-invalid @enderror" required>
-                        <option value="pending" {{ old('technical_approval', $project->technical_approval) == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="approved" {{ old('technical_approval', $project->technical_approval) == 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="rejected" {{ old('technical_approval', $project->technical_approval) == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                    </select>
-                    @error('technical_approval')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div class="col-md-3">
+                        <label for="technical_approval" class="form-label">Project Status</label>
+                        <select name="technical_approval" id="technical_approval"
+                            class="form-control @error('technical_approval') is-invalid @enderror" >
+                            <option value="pending" {{ old('technical_approval', $project->technical_approval) == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ old('technical_approval', $project->technical_approval) == 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ old('technical_approval', $project->technical_approval) == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                        @error('technical_approval')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="delivery_location">Delivery Location</label>
-                    <input type="text" name="delivery_location" id="delivery_location" class="form-control @error('delivery_location') is-invalid @enderror" value="{{ old('delivery_location', $project->delivery_location) }}" required>
-                    @error('delivery_location')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div class="col-md-3">
+                        <label for="delivery_location" class="form-label">Delivery Location</label>
+                        <input type="text" name="delivery_location" id="delivery_location"
+                            class="form-control @error('delivery_location') is-invalid @enderror"
+                            value="{{ old('delivery_location', $project->delivery_location) }}" >
+                        @error('delivery_location')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="client_id">Client *</label>
-                    <div class="input-group">
-                        <select name="client_id" id="client_id" class="form-control @error('client_id') is-invalid @enderror" required>
+                    <div class="col-md-3">
+                        <label for="client_id" class="form-label">Client *</label>
+                        <select name="client_id" id="client_id"
+                            class="form-control @error('client_id') is-invalid @enderror" >
                             <option value="">Select a client</option>
                             @foreach($clients as $client)
-                                <option value="{{ $client->id }}" {{ old('client_id', $project->client_id) == $client->id ? 'selected' : '' }}>
-                                    {{ $client->name }} @if($client->company_name)({{ $client->company_name }})@endif
+                                <option value="{{ $client->id }}"
+                                    {{ old('client_id', $project->client_id) == $client->id ? 'selected' : '' }}>
+                                    {{ $client->name }}@if($client->company_name) ({{ $client->company_name }}) @endif
                                 </option>
                             @endforeach
                         </select>
-                        
+                        @error('client_id')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-                    @error('client_id')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
                 </div>
             </div>
         </div>
-
-        <div class="row mt-3">
-        </div>
-
-        
 
         <div class="row mt-3">
             <div class="col-12">
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description" rows="3" class="form-control @error('description') is-invalid @enderror" required>{{ old('description', $project->description) }}</textarea>
+                    <textarea name="description" id="description" rows="3" class="form-control @error('description') is-invalid @enderror">{{ old('description', $project->description) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -247,7 +276,7 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const dropArea = document.getElementById('initialDropArea');
                 const fileInput = dropArea.querySelector('.file-input');
-                const fileList = document.getElementById('initialFileList'); // This is for NEWLY selected files
+                const fileList = document.getElementById('initialFileList');
                 const fileMessage = dropArea.querySelector('.file-message');
 
                 // Function to handle file selection and update the NEW file list

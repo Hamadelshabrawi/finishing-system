@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('project_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->string('name');
-            $table->string('position');
+            $table->string('name')->nullable();
+            $table->string('position')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
             $table->string('department')->nullable();

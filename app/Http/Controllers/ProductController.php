@@ -58,6 +58,8 @@ class ProductController extends Controller
         $validated = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'quantity' => 'nullable|numeric|min:0',
+            'unit' => 'nullable|string|max:50',
             'project_id' => 'required|exists:projects,id',
         ])->validate();
 
@@ -65,6 +67,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.show', $product->id)->with('success', 'Product created successfully');
     }
+
 
     /**
      * Display the specified resource.
@@ -95,14 +98,26 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'quantity' => 'nullable|numeric|min:0',
+            'unit' => 'nullable|string|max:50',
             'project_id' => 'required|exists:projects,id',
+            'note' => 'nullable',
         ]);
 
         $product = Product::findOrFail($id);
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully');
+        // Update or create the product note
+        if ($request->has('note')) {
+            $product->productNote()->updateOrCreate(
+                ['product_id' => $product->id],
+                ['note' => $request->note]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Product updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.

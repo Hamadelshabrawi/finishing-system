@@ -47,8 +47,8 @@
                             <tr>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Total Price</th>
+                                <th>Cost</th>
+                                <th>Total Cost</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -57,7 +57,7 @@
                                 <tr>
                                     <td>{{ $item->item->name }}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ $item->unit_cost }}</td>
+                                    <td>{{ $item->cost / $item->quantity }}</td>
                                     <td>{{ $item->cost }}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-warning" 

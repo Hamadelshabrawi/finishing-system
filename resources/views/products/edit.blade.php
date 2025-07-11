@@ -5,7 +5,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Edit Product</div>
-
                 <div class="card-body">
                     <form action="{{ route('products.update', $product->id) }}" method="POST">
                         @csrf
@@ -44,11 +43,28 @@
 
                         <div class="mb-3">
                             <label for="note" class="form-label">Note</label>
-                            <textarea class="form-control @error('note') is-invalid @enderror" id="note" name="note" rows="3">{{ $product->ProductNote()->note ?? '' }}</textarea>
+                            <textarea class="form-control @error('note') is-invalid @enderror" id="note" name="note" rows="3">{{ $product->ProductNote->note ?? '' }}</textarea>
                             @error('note')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" step="0.01" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity', $product->quantity) }}">
+                            @error('quantity')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unit" class="form-label">Unit</label>
+                            <input type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit" value="{{ old('unit', $product->unit) }}">
+                            @error('unit')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
 
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('projects.show', $product->project->id) }}" class="btn btn-secondary">Back</a>
@@ -60,37 +76,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            // Handle note submission
-            $('form').on('submit', function(e) {
-                if ($('textarea[name="note"]').val()) {
-                    // Prevent form submission
-                    e.preventDefault();
-                    
-                    // Submit note first
-                    $.ajax({
-                        url: '{{ route('product.note.store', $product->id) }}',
-                        method: 'POST',
-                        data: {
-                            note: $('textarea[name="note"]').val(),
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            // If successful, submit the main form
-                            $('form')[0].submit();
-                        },
-                        error: function(xhr) {
-                            alert('Error saving note: ' + xhr.responseJSON.message);
-                        }
-                    });
-                } else {
-                    // If no note, just submit the form
-                    return true;
-                }
-            });
-        });
-    </script>
-@endpush

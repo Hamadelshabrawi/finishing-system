@@ -1,47 +1,99 @@
 @extends('layouts.app')
 
-@section('title')
-Send Email 
-@endsection
+@section('title') Send Email @endsection
 
 @section('content')
-<div class="container">
-        <h1>Send Email</h1>
-
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Send Email</h3>
+    </div>
+    <div class="card-body">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
         @endif
 
-        <form action="{{ route('email.send') }}" method="POST" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('email.send') }}" enctype="multipart/form-data">
             @csrf
-            <div class="mb-3">
-                <label>Email To:</label>
-                <input type="email" name="to" class="form-control" required>
+            @if(isset($project))
+                <input type="hidden" name="project_id" value="{{ $project->id }}">
+            @endif
+            <div class="form-group">
+                <label>To</label>
+                <input type="email" name="to" class="form-control @error('to') is-invalid @enderror" 
+                       value="{{ old('to', $project->client->email ?? '') }}" required>
+                @error('to')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="mb-3">
-                <label>Subject:</label>
-                <input type="text" name="subject" class="form-control" required>
+
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" value="{{ old('subject', isset($project) ? 'Important ' . $project->project_name . ' Update' : 'Update') }}">
+
+                @error('subject')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="mb-3">
-                <label>Message:</label>
-                <textarea name="message" class="form-control" rows="5" required></textarea>
+
+            <div class="form-group">
+                <label>Message</label>
+                    <textarea name="message" class="form-control @error('message') is-invalid @enderror" rows="10" required>
+                    {{ old('message', isset($project) ? 
+                    "Dear {$project->client->name},
+
+                    This email is regarding your project, {$project->name}. Below is the current status:
+
+                    - **Current Phase:** " . ($project->phase ?? 'In Progress') . "
+                    - **Recent Updates:** " . ($project->last_update ?? 'Implementation ongoing') . "
+                    - **Next Steps:** " . ($project->next_milestone ?? 'Final review') . "
+
+                    Project Link: " . route('projects.show', $project->id) . "
+
+                    Best regards,
+                    " . auth()->user()->name . "
+                    " . auth()->user()->position . "
+                    " . config('app.name') : 
+
+                    "Dear Valued Client,
+
+                    [Custom message about project updates...]"
+                    ) }}
+                    </textarea>
+                    @error('message')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="mb-3">
-                <label>Attachments (optional):</label>
-                <input type="file" name="attachments[]" class="form-control" multiple>
+
+            <div class="form-group">
+                <label>Attachments</label>
+                <input type="file" name="attachments[]" multiple class="form-control-file">
+                
+                @if(isset($project) && $project->files->count())
+                    <div class="mt-3">
+                        <h6>Project Files:</h6>
+                        <ul>
+                            @foreach($project->files as $file)
+                                <li>{{ $file->name }} (will be automatically attached)</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <small class="form-text text-muted">
+                    Max file size: 10MB (additional project files will be included automatically)
+                </small>
             </div>
+
             <button type="submit" class="btn btn-primary">Send Email</button>
         </form>
-
     </div>
+</div>
 @endsection
-
-@push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-@endpush
-
-@push('scripts')
-
-@endpush

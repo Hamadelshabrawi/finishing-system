@@ -77,25 +77,19 @@
                         <div class="info-section mb-4">
                             <h5 class="section-title border-bottom pb-2 mb-3">{{ \App\Models\Translation::getTranslation('approvals') }} @if(auth()->check() && auth()->user()->hasRole('Admin')) & {{ \App\Models\Translation::getTranslation('client') }} @endif</h5>
                             <div class="approval-badges mb-3">
-                                <span class="badge bg-{{ $project->technical_approval === 'approved' ? 'success' : ($project->technical_approval === 'rejected' ? 'danger' : 'warning') }} ms-2">
-                                    {{ \App\Models\Translation::getTranslation('technical_approval') }}: {{ \App\Models\Translation::getTranslation($project->technical_approval) }}
-                                </span>
-                                {{-- Project Status (from previous Project Information card, now integrated here) --}}
-                                <span class="badge {{ $project->status == 'Completed' ? 'bg-success' : ($project->status == 'In Progress' ? 'bg-warning text-dark' : 'bg-info') }} ms-2">
-                                    {{ \App\Models\Translation::getTranslation('status') }}: {{ \App\Models\Translation::getTranslation($project->status) }}
-                                </span>
+                                <p><strong>Project Status :</strong><br> {{ \App\Models\Translation::getTranslation($project->technical_approval) }}</p>
                             </div>
                             @if(auth()->check() && auth()->user()->hasRole('Admin'))
                                 <div class="client-info">
-                                    <p><strong>{{ \App\Models\Translation::getTranslation('client') }}:</strong><br>
-                                        {{ $project->client->name }}<br>
-                                        @if($project->client->company_name)
-                                            {{ $project->client->company_name }}<br>
+                                    <p><strong>Client Information :</strong><br>
+                                        {{ $project->client->name ?? '' }}<br>
+                                        @if($project->client->company_name ?? '')
+                                            {{ $project->client->company_name ?? '' }}<br>
                                         @endif
-                                        @if($project->client->phone)
+                                        @if($project->client->phone ?? '')
                                             <i class="fas fa-phone"></i> {{ $project->client->phone }}<br>
                                         @endif
-                                        @if($project->client->email)
+                                        @if($project->client->email ?? '')
                                             <i class="fas fa-envelope"></i> {{ $project->client->email }}
                                         @endif
                                     </p>
@@ -278,57 +272,77 @@
                 </button>
                 @endcan
             </div>
+           @php
+            $totalCost = 0;
+            @endphp
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
                                 <th>Description</th>
                                 <th>Items</th>
                                 <th>Outsources</th>
                                 <th>Notes</th>
                                 <th>Final Finishes</th>
+                                <th>Cost</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($project->products as $product)
+                                @php
+                                    // Example cost logic (adjust to your structure)
+                                    $productCost = $product->items->sum('cost') + $product->outsources->sum('cost');
+                                    $totalCost += $productCost;
+                                @endphp
                                 <tr>
                                     <td>{{ $product->name }}</td>
+                                    <td>{{ $product->quantity }}</td>
+                                    <td>{{ $product->unit }}</td>
                                     <td>{{ $product->description }}</td>
                                     <td>{{ $product->items->count() }}</td>
                                     <td>{{ $product->outsources->count() }}</td>
                                     <td>{{ isset($product->ProductNote) ? '1' : '0' }}</td>
                                     <td>{{ isset($product->finalFinishes) ? $product->finalFinishes->count() : '0' }}</td>
+                                    <td>{{ number_format($productCost, 2) }}</td>
                                     <td>
                                         @can('Products List')
-                                        <div class="btn-group" role="group" aria-label="Product actions">
-                                            @can('View Product Details')
-                                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-info" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            @endcan
-                                            @can('Edit Product')
-                                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            @endcan
-                                            @can('Delete Product')
-                                            <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="{{ $product->id }}" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                            @endcan
-                                        </div>
+                                            <div class="btn-group" role="group" aria-label="Product actions">
+                                                @can('View Product Details')
+                                                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-info" title="View">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('Edit Product')
+                                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('Delete Product')
+                                                    <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="{{ $product->id }}" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </div>
                                         @endcan
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8" class="text-end fw-bold">Total Cost</td>
+                                <td colspan="2" class="fw-bold">{{ number_format($totalCost, 2) }}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -343,9 +357,11 @@
                         <h5 class="modal-title" id="createProductModalLabel">Create New Product</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <form action="{{ route('products.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="project_id" value="{{ $project->id }}">
+                        
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Product Name</label>
@@ -354,6 +370,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3"></textarea>
@@ -361,7 +378,26 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" min="1">
+                                    @error('quantity')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="unit" class="form-label">Unit</label>
+                                    <input type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit">
+                                    @error('unit')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">Create Product</button>

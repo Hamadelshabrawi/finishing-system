@@ -15,9 +15,9 @@ class OutsourceController extends Controller
         $this->middleware('auth');
         // Apply middleware for each action
         $this->middleware('can:Products List')->only(['index']);
-        $this->middleware('can:Create Outsource')->only(['create', 'store']);
-        $this->middleware('can:Edit Outsource')->only(['edit', 'update']);
-        $this->middleware('can:Delete Outsource')->only(['destroy']);
+        $this->middleware('can:create outsources')->only(['create', 'store']);
+        $this->middleware('can:Edit Outsources')->only(['edit', 'update']);
+        $this->middleware('can:Delete Outsources')->only(['destroy']);
     }
 
     // Display a listing of the resource
@@ -55,12 +55,12 @@ class OutsourceController extends Controller
             'supplier_id' => 'required|exists:suppliers,id',
             'project_id' => 'required|exists:projects,id',
         ]);
-
+        $cost =  $validated['cost'] * $validated['quantity'];
         Outsource::create([
             'product_id' => $productId,
             'project_id' => $validated['project_id'],
             'outsource_name' => $validated['outsource_name'],
-            'cost' => $validated['cost'],
+            'cost' => $cost,
             'quantity' => $validated['quantity'],
             'boarder_note' => $validated['boarder_note'],
             'supplier_id' => $validated['supplier_id'],

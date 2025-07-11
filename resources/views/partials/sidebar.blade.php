@@ -41,9 +41,9 @@
                         </a>
                     </li>
                 </ul>
-
+            
                 @can('Manage Translations')
-                <li class="nav-item">
+                <li class="nav-item" style="display:none">
                     <a class="nav-link" href="{{ route('translations.index') }}">
                         <i class="fas fa-language"></i>
                         <p>{{ __('messages.translations.title') }}</p>
@@ -120,7 +120,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('email.form') }}">
                     <i class="fa-regular fa-envelope"></i>
-                    <span class="ml-3 item-text">{{ __('en::en.Send Email') }}</span>
+                    <span class="ml-3 item-text">{{ __('Send Email') }}</span>
                 </a>
             </li>
             @endcan

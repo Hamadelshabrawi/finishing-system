@@ -175,24 +175,7 @@
             });
         });
 
-        // Add client deletion functionality
-        $('#client_id').change(function() {
-            // Add delete button when a client is selected
-            if ($(this).val()) {
-                if (!$('.delete-client-btn').length) {
-                    $(this).closest('.input-group').append(
-                        '<div class="input-group-append">' +
-                        '    <button type="button" class="btn btn-outline-danger delete-client-btn" title="Delete Client">' +
-                        '        <i class="fas fa-trash"></i>' +
-                        '    </button>' +
-                        '</div>'
-                    );
-                }
-            } else {
-                // Remove delete button when no client is selected
-                $('.delete-client-btn').remove();
-            }
-        });
+ 
 
         // Handle client deletion
         $(document).on('click', '.delete-client-btn', function() {

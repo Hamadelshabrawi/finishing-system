@@ -12,7 +12,12 @@
                 </div>
 
                 <div class="card-body">
+                    @php
+                        $productCost = $product->items->sum('cost') + $product->outsources->sum('cost'); 
+                    
+                    @endphp
 
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card">
@@ -20,7 +25,12 @@
                                 <div class="card-body">
                                     <p><strong>Project:</strong> {{ $product->project->project_name ?? 'N/A' }}</p>
                                     <p><strong>Product:</strong> {{ $product->name }}</p>
+                                    <p><strong>Quantity:</strong> {{ $product->quantity }}</p>
+                                    <p><strong>Unit:</strong> {{ $product->unit }}</p>
                                     <p><strong>Description:</strong> {{ $product->description }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <p><strong>Total Cost:</strong> {{ number_format($productCost, 2) }} EGP</p>
                                 </div>
                             </div>
                         </div>
@@ -28,22 +38,20 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">{{ __('products.actions.actions') }}</div>
-                                <div class="card-body">
-                                    @can('Edit Product')
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
-                                    @endcan
-                                    @can('Delete Product')
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                    @endcan
-                                    @can('Consume Item')
-                                    <a href="{{ route('products.items.consume.create', $product) }}" class="btn btn-info">Consume Items</a>
-                                    @endcan
-                                    <a href="{{ route('projects.show', $product->project->id) }}" class="btn btn-secondary">Back</a>
-                                </div>
+                                    <div class="card-body">
+                                        @can('Edit Product')
+                                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('Delete Product')
+                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                        @endcan
+                                        
+                                        <a href="{{ route('projects.show', $product->project->id) }}" class="btn btn-secondary">Back</a>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -69,20 +77,20 @@
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Quantity</th>
+                                                    <th>Cost</th>
+                                                    <th>Total Cost</th>
                                                     <th>{{ __('products.items.actions') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($product->items as $item)
                                                 <tr>
-                                                    <td>{{ $item->name }}</td>
-                                                    <td>{{ $item->pivot->quantity }}</td>
+                                                    <td>{{ $item->item->name }}</td>
+                                                    <td>{{ $item->quantity ?? '' }}</td>
+                                                    <td>{{ $item->cost / $item->quantity ?? '' }}</td>
+                                                    <td>{{ $item->cost ?? '' }}</td>
                                                     <td>
-                                                        @can('Edit Item')
-                                                        <a href="{{ route('product.items.edit', ['product' => $product->id, 'item' => $item->id]) }}" class="btn btn-sm btn-warning">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        @endcan
+                                                        
                                                         @can('Delete Item')
                                                         <form action="{{ route('product.items.destroy', ['product' => $product->id, 'item' => $item->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?')">
                                                             @csrf
@@ -124,18 +132,21 @@
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
-                                                    <th>Cost</th>
                                                     <th>Quantity</th>
+                                                    <th>Cost</th>
                                                     <th>Border Note</th>
+                                                    <th>Total Cost</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($product->outsources as $outsource)
                                                 <tr>
                                                     <td>{{ $outsource->outsource_name }}</td>
-                                                    <td>{{ $outsource->cost }}</td>
+                                                    <td>{{ $outsource->cost / $outsource->quantity }}</td>
                                                     <td>{{ $outsource->quantity }}</td>
                                                     <td>{{ $outsource->boarder_note }}</td>
+                                                    <td>{{ $outsource->cost }}</td>
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -305,12 +316,7 @@
                                                 data-note-id="{{ $product->ProductNote->id }}"> {{-- Added data-note-id --}}
                                                 <i class="fas fa-edit me-2"></i>Edit Note
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-danger delete-note-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteNoteModal"
-                                                data-note-id="{{ $product->ProductNote->id }}"> {{-- Added data-note-id --}}
-                                                <i class="fas fa-trash me-2"></i>Delete Note
-                                            </button>
+                                           
                                             @endif
                                         </div>
                                     </div>
@@ -401,7 +407,7 @@
                 <h5 class="modal-title" id="editNoteModalLabel">Edit Note</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editNoteForm" method="POST"> {{-- Removed action and added method="POST" --}}
+            <form id="editNoteForm" method="POST">
                 @csrf
                 @method('PUT') {{-- Added PUT method for updates --}}
                 <div class="modal-body">
@@ -413,28 +419,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteNoteModal" tabindex="-1" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteNoteModalLabel">Delete Note</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="deleteNoteForm" method="POST"> {{-- Removed action and added method="POST" --}}
-                @csrf
-                @method('DELETE') {{-- Added DELETE method for deletion --}}
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this note?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
                 </div>
             </form>
         </div>
@@ -458,7 +442,7 @@
     // Handle delete note button click
     $(document).on('click', '.delete-note-btn', function() {
         const noteId = $(this).data('note-id');
-        $('#deleteNoteForm').attr('action', `/products/{{ $product->id }}/notes/${noteId}`); // Set action dynamically
+        $('#deleteNoteForm').attr('action', `/products/{{ $product->id }}/notes/${noteId}`);
         $('#deleteNoteModal').modal('show');
     });
 </script>

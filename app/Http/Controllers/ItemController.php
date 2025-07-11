@@ -12,9 +12,13 @@ use App\Models\Product;
 class ItemController extends Controller
 {
     
-
-
-
+    public function __construct()
+    {
+        $this->middleware('permission:Items Details', ['only' => ['index', 'data']]);
+        $this->middleware('permission:Create Item', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Edit Item', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Delete Item', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -26,15 +30,15 @@ class ItemController extends Controller
                 ->addColumn('actions', function($data) {
                     $actions = '';
         
-                    if (auth()->user()->can('Project Details')) {
+                    if (auth()->user()->can('Items Details')) {
                         $actions .= '<a href="'.route('items.show', $data->id).'" class="btn btn-info btn-sm">View</a> ';
                     }
         
-                    if (auth()->user()->can('Create Project')) {
+                    if (auth()->user()->can('Edit Item')) {
                         $actions .= '<a href="'.route('items.edit', $data->id).'" class="btn btn-warning btn-sm">Edit</a> ';
                     }
         
-                    if (auth()->user()->can('Delete Project')) {
+                    if (auth()->user()->can('Delete Item')) {
                         $actions .= '<form action="'.route('items.destroy', $data->id).'" method="POST" style="display:inline;">
                                         '.csrf_field().method_field('DELETE').'
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -47,7 +51,6 @@ class ItemController extends Controller
                 ->make(true);
         }
         
-    
         return view('items.index');
     }
 

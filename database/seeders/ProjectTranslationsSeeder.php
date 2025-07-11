@@ -168,7 +168,7 @@ class ProjectTranslationsSeeder extends Seeder
         $this->createTranslation('technical_approval', 'Technical Approval', 'الموافقة الفنية');
         $this->createTranslation('delivery_location', 'Delivery Location', 'موقع التسليم');
         $this->createTranslation('client_id', 'Client', 'العميل');
-        $this->createTranslation('contact_value', 'Contract Value', 'قيمة العقد');
+        $this->createTranslation('contact_value', 'Project Number', 'رقم المشروع');
         $this->createTranslation('execution_period', 'Execution Period (days)', 'مدة التنفيذ (أيام)');
 
         // Dashboard
@@ -267,7 +267,7 @@ class ProjectTranslationsSeeder extends Seeder
         // Show View Specific
         $this->createTranslation('basic_information', 'Basic Information', 'المعلومات الأساسية');
         $this->createTranslation('approvals', 'Approvals', 'الموافقات');
-        $this->createTranslation('contract_value', 'Contract Value', 'قيمة العقد');
+        $this->createTranslation('contract_value', 'Project Number', 'رقم المشروع');
         $this->createTranslation('days', 'days', 'أيام');
         $this->createTranslation('export_pdf_ar', 'Export PDF (Arabic)', 'تصدير PDF (عربي)');
         $this->createTranslation('export_pdf_en', 'Export PDF (English)', 'تصدير PDF (إنجليزي)');

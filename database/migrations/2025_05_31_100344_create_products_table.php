@@ -15,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignId('project_id')
-                  ->constrained('projects')
-                  ->onDelete('cascade');  
+            
+            // New columns
+            $table->decimal('quantity', 12, 2)->nullable();
+            $table->string('unit', 50)->nullable();
+            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**

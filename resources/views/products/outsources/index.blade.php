@@ -59,7 +59,7 @@
                                         @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="cost" class="form-label">Cost</label>
+                                        <label for="cost" class="form-label">Cost / 1 Quantity</label>
                                         <input type="number" class="form-control @error('cost') is-invalid @enderror" id="cost" name="cost" step="0.01" required>
                                         @error('cost')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -96,10 +96,11 @@
                         <thead>
                             <tr>
                                 <th>Supplier</th>
-                                <th>Name</th>
-                                <th>Cost</th>
+                                <th>Items</th>
                                 <th>Quantity</th>
+                                <th>cost</th>
                                 <th>Border Note</th>
+                                <th>Total Cost</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -108,9 +109,10 @@
                                 <tr>
                                     <td>{{ $outsource->supplier->name }}</td>
                                     <td>{{ $outsource->outsource_name }}</td>
-                                    <td>{{ $outsource->cost }}</td>
                                     <td>{{ $outsource->quantity }}</td>
+                                    <td>{{ $outsource->cost / $outsource->quantity }}</td>
                                     <td>{{ $outsource->boarder_note }}</td>
+                                    <td>{{ $outsource->cost }}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-warning edit-outsource-btn" data-toggle="modal"
                                             data-target="#editOutsourceModal"

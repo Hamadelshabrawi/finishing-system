@@ -67,7 +67,8 @@
                                                            value="{{ $permission->id }}"
                                                            id="perm_{{ $permission->id }}"
                                                            class="form-check-input permission-checkbox"
-                                                           @if($role->hasPermissionTo($permission)) checked @endif>
+                                                          @if($role->hasPermissionTo($permission->name)) checked @endif
+
                                                     <label class="form-check-label d-flex align-items-center w-100"
                                                            for="perm_{{ $permission->id }}">
                                                         <span class="badge bg-primary me-2">

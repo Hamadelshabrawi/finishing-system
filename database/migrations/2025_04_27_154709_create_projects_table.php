@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->integer('contact_value');
-            $table->integer('execution_period');
-            $table->date('delivery_date');
-            $table->string('delivery_location');
-            $table->foreignId('client_id')
+            $table->date('date')->nullable();
+            $table->string('contact_value')->nullable();
+            $table->integer('execution_period')->nullable();
+            $table->date('delivery_date')->nullable();
+            $table->string('delivery_location')->nullable();
+            $table->foreignId('client_id')->nullable()
             ->constrained('clients')
             ->onDelete('restrict');
-            $table->text('description');
-            $table->enum('technical_approval', ['pending', 'approved', 'need_modify','dismissed'])->default('pending');
+            $table->text('description')->nullable();
+            $table->enum('technical_approval', ['pending', 'approved', 'need_modify','dismissed'])->default('pending')->nullable();
             $table->foreignId('created_by')->constrained('users');
             
             $table->timestamps();
